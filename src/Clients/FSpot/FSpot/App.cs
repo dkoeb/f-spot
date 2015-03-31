@@ -212,6 +212,7 @@ namespace FSpot
 			FSpot.Imaging.ModuleController.RegisterTypes (Container);
 			FSpot.Import.ModuleController.RegisterTypes (Container);
 			FSpot.Thumbnail.ModuleController.RegisterTypes (Container);
+			FSpot.Video.ModuleController.RegisterTypes (Container);
 		}
 
 		void SendMessage (Command command, MessageData md)

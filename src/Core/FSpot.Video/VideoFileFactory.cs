@@ -1,5 +1,5 @@
 ﻿//
-// ThumbnailerFactory.cs
+// VideoFileFactory.cs
 //
 // Author:
 //   Daniel Köb <daniel.koeb@peony.at>
@@ -26,39 +26,29 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+using FSpot.FileSupport;
 using FSpot.FileSystem;
-using FSpot.Imaging;
-using FSpot.Video;
-using Hyena;
 
-namespace FSpot.Thumbnail
+namespace FSpot.Video
 {
-	class ThumbnailerFactory : IThumbnailerFactory
+	class VideoFileFactory : FileFactoryBase<IVideoFile>, IVideoFileFactory
 	{
-		readonly IImageFileFactory imageFileFactory;
-		readonly IVideoFileFactory videoFileFactory;
+		#region ctors
 
-		readonly IFileSystem fileSystem;
-
-		public ThumbnailerFactory(IImageFileFactory imageFileFactory, IVideoFileFactory videoFileFactory, IFileSystem fileSystem)
+		public VideoFileFactory (IFileSystem fileSystem)
+			: base (fileSystem)
 		{
-			this.imageFileFactory = imageFileFactory;
-			this.videoFileFactory = videoFileFactory;
-
-			this.fileSystem = fileSystem;
+			RegisterTypes ();
 		}
 
-		#region IThumbnailerFactory implementation
+		#endregion
 
-		public IThumbnailer GetThumbnailerForUri (SafeUri uri)
+		#region private
+
+		void RegisterTypes ()
 		{
-			if (imageFileFactory.HasLoader (uri)) {
-				return new ImageThumbnailer (uri, imageFileFactory, fileSystem);
-			}
-			if (videoFileFactory.HasLoader (uri)) {
-				return new VideoThumbnailer (uri);
-			}
-			return null;
+			Register<VideoFile> ("avi");
+			Register<VideoFile> ("video/x-msvideo");
 		}
 
 		#endregion

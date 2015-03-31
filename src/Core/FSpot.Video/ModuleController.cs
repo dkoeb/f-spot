@@ -1,5 +1,5 @@
 ﻿//
-// ThumbnailerFactory.cs
+// ModuleController.cs
 //
 // Author:
 //   Daniel Köb <daniel.koeb@peony.at>
@@ -26,41 +26,15 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using FSpot.FileSystem;
-using FSpot.Imaging;
-using FSpot.Video;
-using Hyena;
+using FSpot.Utils;
 
-namespace FSpot.Thumbnail
+namespace FSpot.Video
 {
-	class ThumbnailerFactory : IThumbnailerFactory
+	public static class ModuleController
 	{
-		readonly IImageFileFactory imageFileFactory;
-		readonly IVideoFileFactory videoFileFactory;
-
-		readonly IFileSystem fileSystem;
-
-		public ThumbnailerFactory(IImageFileFactory imageFileFactory, IVideoFileFactory videoFileFactory, IFileSystem fileSystem)
+		public static void RegisterTypes (TinyIoCContainer container)
 		{
-			this.imageFileFactory = imageFileFactory;
-			this.videoFileFactory = videoFileFactory;
-
-			this.fileSystem = fileSystem;
+			container.Register<IVideoFileFactory, VideoFileFactory> ().AsSingleton ();
 		}
-
-		#region IThumbnailerFactory implementation
-
-		public IThumbnailer GetThumbnailerForUri (SafeUri uri)
-		{
-			if (imageFileFactory.HasLoader (uri)) {
-				return new ImageThumbnailer (uri, imageFileFactory, fileSystem);
-			}
-			if (videoFileFactory.HasLoader (uri)) {
-				return new VideoThumbnailer (uri);
-			}
-			return null;
-		}
-
-		#endregion
 	}
 }
