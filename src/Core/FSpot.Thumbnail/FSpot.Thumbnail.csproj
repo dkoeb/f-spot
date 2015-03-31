@@ -53,6 +53,7 @@
     <Compile Include="ModuleController.cs" />
     <Compile Include="IThumbnailLoader.cs" />
     <Compile Include="ThumbnailLoader.cs" />
+    <Compile Include="VideoThumbnailer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
