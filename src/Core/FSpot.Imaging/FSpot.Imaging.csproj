@@ -99,6 +99,10 @@
       <Project>{F7821E0B-6861-47D7-9FCE-F853CDF2F838}</Project>
       <Name>FSpot.FileSystem</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FSpot.FileSupport\FSpot.FileSupport.csproj">
+      <Project>{912A8373-B157-4BA1-9E40-CD1C5180ABDA}</Project>
+      <Name>FSpot.FileSupport</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="FSpot.Imaging.dll.config">

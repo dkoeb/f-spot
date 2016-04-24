@@ -1,14 +1,10 @@
-//
-// IImageFile.cs
+﻿//
+// FileBase.cs
 //
 // Author:
-//   Stephane Delcroix <stephane@delcroix.org>
-//   Ruben Vermeersch <ruben@savanne.be>
-//   Stephen Shaw <sshaw@decriptor.com>
+//   Daniel Köb <daniel.koeb@peony.at>
 //
-// Copyright (C) 2007-2010 Novell, Inc.
-// Copyright (C) 2007-2009 Stephane Delcroix
-// Copyright (C) 2010 Ruben Vermeersch
+// Copyright (C) 2016 Daniel Köb
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -30,25 +26,12 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-using FSpot.Cms;
-using FSpot.FileSupport;
-using FSpot.Utils;
-using Gdk;
-using Hyena;
-
-namespace FSpot.Imaging
+namespace FSpot.FileSupport
 {
-	public interface IImageFile : IFileType, IDisposable
+	public class FileBase : IFileType
 	{
-		SafeUri Uri { get; }
-		ImageOrientation Orientation { get; }
-		IMetadata Metadata { get; }
-
-		Pixbuf Load ();
-		Pixbuf Load (int maxWidth, int maxHeight);
-		Profile GetProfile ();
-		Stream PixbufStream ();
+		public FileBase ()
+		{
+		}
 	}
 }

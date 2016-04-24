@@ -396,6 +396,10 @@
       <Project>{6ACC079F-8D46-4F91-AE3C-B603B5F2410D}</Project>
       <Name>FSpot.Photos</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\FSpot.FileSupport\FSpot.FileSupport.csproj">
+      <Project>{912A8373-B157-4BA1-9E40-CD1C5180ABDA}</Project>
+      <Name>FSpot.FileSupport</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="FSpot\" />

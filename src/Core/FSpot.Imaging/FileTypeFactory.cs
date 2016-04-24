@@ -35,6 +35,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FSpot.FileSupport;
 using FSpot.FileSystem;
 using FSpot.Imaging.FileTypes;
 using FSpot.Utils;
@@ -43,29 +44,24 @@ using Hyena;
 
 namespace FSpot.Imaging
 {
-	class FileTypeFactory
+	class FileTypeFactory : FileFactoryBase<BaseImageFile>
 	{
 		#region fields
 
-		readonly TinyIoCContainer container;
 		readonly List<string> imageTypes;
 		readonly List<string> jpegExtensions;
 		readonly List<string> rawExtensions;
-
-		readonly IFileSystem fileSystem;
 
 		#endregion
 
 		#region ctors
 
 		public FileTypeFactory (IFileSystem fileSystem)
+			: base (fileSystem)
 		{
-			container = new TinyIoCContainer ();
 			imageTypes = new List<string> ();
 			jpegExtensions = new List<string> ();
 			rawExtensions = new List<string> ();
-
-			this.fileSystem = fileSystem;
 
 			RegisterTypes ();
 		}
@@ -174,7 +170,7 @@ namespace FSpot.Imaging
 			where T : BaseImageFile
 		{
 			foreach (var mimeType in mimeTypes) {
-				container.Register<BaseImageFile, T> (mimeType).AsMultiInstance ();
+				Register<T> (mimeType);
 		}
 			imageTypes.AddRange (mimeTypes);
 		}
@@ -183,7 +179,7 @@ namespace FSpot.Imaging
 			where T : BaseImageFile
 		{
 			foreach (var extension in extensions) {
-				container.Register<BaseImageFile, T> (extension).AsMultiInstance ();
+				Register<T> (extension);
 				switch (type) {
 				case ImageType.Jpeg:
 					jpegExtensions.Add (extension);
@@ -201,54 +197,9 @@ namespace FSpot.Imaging
 			return imageTypes;
 		}
 
-		public bool HasLoader (SafeUri uri)
-		{
-			return GetLoaderType (uri) != null;
-		}
-
-		string GetLoaderType (SafeUri uri)
-		{
-			// check if GIO can find the file, which is not the case
-			// with filenames with invalid encoding
-			if (!fileSystem.File.Exists (uri))
-				return null;
-
-			string extension = uri.GetExtension ().ToLower ();
-
-			// Ignore video thumbnails
-			if (extension == ".thm")
-				return null;
-
-			// Ignore empty files
-			if (fileSystem.File.GetSize (uri) == 0)
-				return null;
-
-			// Get loader by mime-type
-			string mime = fileSystem.File.GetMimeType (uri);
-			if (container.CanResolve<BaseImageFile> (mime))
-				return mime;
-
-			// Get loader by extension
-			return container.CanResolve<BaseImageFile> (extension) ? extension : null;
-		}
-
 		#endregion
 
 		#region IImageFileFactory implementation
-
-		public BaseImageFile Create (SafeUri uri)
-		{
-			var name = GetLoaderType (uri);
-			if (name == null)
-				throw new Exception (string.Format ("Unsupported image: {0}", uri));
-
-			try {
-				return container.Resolve<BaseImageFile> (name);
-			} catch (Exception e) {
-				Log.DebugException (e);
-				throw e;
-			}
-		}
 
 		public bool IsRaw (SafeUri uri)
 		{
@@ -274,8 +225,8 @@ namespace FSpot.Imaging
 		{
 			SaveToSuitableFormat (destination, pixbuf, jpegQuality);
 
-			using (var metadataFrom = MetadataService.Parse (source, fileSystem)) {
-				using (var metadataTo = MetadataService.Parse (destination, fileSystem)) {
+			using (var metadataFrom = MetadataService.Parse (source, FileSystem)) {
+				using (var metadataTo = MetadataService.Parse (destination, FileSystem)) {
 					metadataTo.CopyFrom (metadataFrom);
 
 					// Reset orientation to make sure images appear upright.

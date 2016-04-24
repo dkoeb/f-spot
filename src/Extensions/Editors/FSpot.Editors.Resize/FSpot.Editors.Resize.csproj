@@ -85,6 +85,10 @@
       <Project>{CE160879-1BF0-4711-A18F-FDA2772900FA}</Project>
       <Name>FSpot.Utils</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\FSpot.FileSupport\FSpot.FileSupport.csproj">
+      <Project>{912A8373-B157-4BA1-9E40-CD1C5180ABDA}</Project>
+      <Name>FSpot.FileSupport</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="FSpot.Addins.Editors\" />

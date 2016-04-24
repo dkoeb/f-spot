@@ -65,6 +65,10 @@
       <Project>{F7821E0B-6861-47D7-9FCE-F853CDF2F838}</Project>
       <Name>FSpot.FileSystem</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FSpot.FileSupport\FSpot.FileSupport.csproj">
+      <Project>{912A8373-B157-4BA1-9E40-CD1C5180ABDA}</Project>
+      <Name>FSpot.FileSupport</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FSpot.Utils.UnitTest\FSpot.Utils.UnitTest.csproj">
       <Project>{5341c44c-b576-4024-a5ab-045b26f38bdf}</Project>
       <Name>FSpot.Utils.UnitTest</Name>

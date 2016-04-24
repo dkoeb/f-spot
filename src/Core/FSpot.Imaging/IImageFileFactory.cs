@@ -26,17 +26,14 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System.Collections.Generic;
+using FSpot.FileSupport;
 using Hyena;
 using Gdk;
 
 namespace FSpot.Imaging
 {
-	public interface IImageFileFactory
+	public interface IImageFileFactory : IFileFactory<IImageFile>
 	{
-		IImageFile Create (SafeUri uri);
-		bool HasLoader (SafeUri uri);
-
 		bool IsJpeg (SafeUri uri);
 		bool IsRaw (SafeUri uri);
 		bool IsJpegRawPair (SafeUri file1, SafeUri file2);
