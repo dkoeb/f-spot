@@ -30,6 +30,7 @@
 //
 
 using System.Collections.Generic;
+using FSpot.Core;
 using FSpot.FileSystem;
 using FSpot.Imaging;
 using Hyena;
@@ -60,7 +61,7 @@ namespace FSpot.Import
 
 		#region IImportSource
 
-		public virtual IEnumerable<FileImportInfo> ScanPhotos (bool recurseSubdirectories, bool mergeRawAndJpeg)
+		public virtual IEnumerable<FilePhoto> ScanPhotos (bool recurseSubdirectories, bool mergeRawAndJpeg)
 		{
 			return ScanPhotoDirectory (recurseSubdirectories, mergeRawAndJpeg, root);
 		}
@@ -69,7 +70,7 @@ namespace FSpot.Import
 
 		#region private
 
-		protected IEnumerable<FileImportInfo> ScanPhotoDirectory (bool recurseSubdirectories, bool mergeRawAndJpeg, SafeUri uri)
+		protected IEnumerable<FilePhoto> ScanPhotoDirectory (bool recurseSubdirectories, bool mergeRawAndJpeg, SafeUri uri)
 		{
 			var enumerator = (new RecursiveFileEnumerator (uri, fileSystem) {
 				Recurse = recurseSubdirectories,
@@ -106,11 +107,11 @@ namespace FSpot.Import
 					file = nextFile;
 				}
 
-				FileImportInfo info;
+				FilePhoto info;
 				if (version == null) {
-					info  = new FileImportInfo (original, Catalog.GetString ("Original"));
+					info  = new FilePhoto (original, Catalog.GetString ("Original"));
 				} else {
-					info  = new FileImportInfo (original, Catalog.GetString ("Original RAW"));
+					info  = new FilePhoto (original, Catalog.GetString ("Original RAW"));
 					info.AddVersion (version, Catalog.GetString ("Original JPEG"));
 				}
 

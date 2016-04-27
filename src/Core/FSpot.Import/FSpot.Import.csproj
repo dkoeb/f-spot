@@ -37,7 +37,6 @@
     <Reference Include="Mono.Posix" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileImportInfo.cs" />
     <Compile Include="FileImportSource.cs" />
     <Compile Include="IImportSource.cs" />
     <Compile Include="ImportController.cs" />
