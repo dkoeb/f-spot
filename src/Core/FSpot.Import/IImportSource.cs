@@ -32,11 +32,12 @@
 //
 
 using System.Collections.Generic;
+using FSpot.Core;
 
 namespace FSpot.Import
 {
 	public interface IImportSource
 	{
-		IEnumerable<FileImportInfo> ScanPhotos (bool recurseSubdirectories, bool mergeRawAndJpeg);
+		IEnumerable<FilePhoto> ScanPhotos (bool recurseSubdirectories, bool mergeRawAndJpeg);
 	}
 }

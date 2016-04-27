@@ -32,6 +32,7 @@
 //
 
 using System.Collections.Generic;
+using FSpot.Core;
 using FSpot.FileSystem;
 using FSpot.Imaging;
 using Hyena;
@@ -49,7 +50,7 @@ namespace FSpot.Import
 			this.uris = uris;
 		}
 
-		public override IEnumerable<FileImportInfo> ScanPhotos (bool recurseSubdirectories, bool mergeRawAndJpeg)
+		public override IEnumerable<FilePhoto> ScanPhotos (bool recurseSubdirectories, bool mergeRawAndJpeg)
 		{
 			foreach (var uri in uris) {
 				Log.Debug ("Scanning " + uri);
