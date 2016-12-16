@@ -61,7 +61,7 @@ namespace FSpot.Filters
 				}
 
 				using (Pixbuf pixbuf = img.Load ((int)Size, (int)Size)) {
-					FSpot.Utils.PixbufUtils.CreateDerivedVersion (req.Current, dest_uri, 95, pixbuf);
+					App.Instance.Container.Resolve<IImageFileFactory>().CreateDerivedVersion (req.Current, dest_uri, 95, pixbuf);
 				}
 			}
 

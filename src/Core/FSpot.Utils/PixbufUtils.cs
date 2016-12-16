@@ -269,34 +269,6 @@ namespace FSpot.Utils
 			return scale;
 		}
 
-		public static void CreateDerivedVersion (SafeUri source, SafeUri destination, uint jpeg_quality, Pixbuf pixbuf)
-		{
-			SaveToSuitableFormat (destination, pixbuf, jpeg_quality);
-
-			using (var metadata_from = MetadataService.Parse (source)) {
-				using (var metadata_to = MetadataService.Parse (destination)) {
-					metadata_to.CopyFrom (metadata_from);
-
-					// Reset orientation to make sure images appear upright.
-					metadata_to.Orientation = ImageOrientation.TopLeft;
-					metadata_to.Save ();
-				}
-			}
-		}
-
-		static void SaveToSuitableFormat (SafeUri destination, Pixbuf pixbuf, uint jpeg_quality)
-		{
-			// FIXME: this needs to work on streams rather than filenames. Do that when we switch to
-			// newer GDK.
-			var extension = destination.GetExtension ().ToLower ();
-			if (extension == ".png")
-				pixbuf.Save (destination.LocalPath, "png");
-			else if (extension == ".jpg" || extension == ".jpeg")
-				pixbuf.Save (destination.LocalPath, "jpeg", jpeg_quality);
-			else
-				throw new NotImplementedException ("Saving this file format is not supported");
-		}
-
 		#region Gdk hackery
 
 		// This hack below is needed because there is no wrapped version of
@@ -306,7 +278,7 @@ namespace FSpot.Utils
 		[DllImport("libgdk_pixbuf-2.0-0.dll")]
 		static extern bool gdk_pixbuf_save (IntPtr raw, IntPtr filename, IntPtr type, out IntPtr error, IntPtr optlabel1, IntPtr optvalue1, IntPtr dummy);
 
-		static bool Save (this Pixbuf pixbuf, string filename, string type, uint jpeg_quality)
+		public static bool Save (this Pixbuf pixbuf, string filename, string type, uint jpeg_quality)
 		{
 			IntPtr error = IntPtr.Zero;
 			IntPtr nfilename = GLib.Marshaller.StringToPtrGStrdup (filename);

@@ -27,6 +27,7 @@
 //
 
 using Hyena;
+using Gdk;
 
 namespace FSpot.Imaging
 {
@@ -38,5 +39,7 @@ namespace FSpot.Imaging
 		bool IsJpeg (SafeUri uri);
 		bool IsRaw (SafeUri uri);
 		bool IsJpegRawPair (SafeUri file1, SafeUri file2);
+
+		void CreateDerivedVersion (SafeUri source, SafeUri destination, uint jpegQuality, Pixbuf pixbuf);
 	}
 }

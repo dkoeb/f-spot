@@ -280,6 +280,34 @@ namespace FSpot.Imaging
 					(IsRaw (file1) && IsJpeg (file2)));
 		}
 
+		public void CreateDerivedVersion (SafeUri source, SafeUri destination, uint jpegQuality, Pixbuf pixbuf)
+		{
+			SaveToSuitableFormat (destination, pixbuf, jpegQuality);
+
+			using (var metadataFrom = MetadataService.Parse (source)) {
+				using (var metadataTo = MetadataService.Parse (destination)) {
+					metadataTo.CopyFrom (metadataFrom);
+
+					// Reset orientation to make sure images appear upright.
+					metadataTo.Orientation = ImageOrientation.TopLeft;
+					metadataTo.Save ();
+				}
+			}
+		}
+
+		static void SaveToSuitableFormat (SafeUri destination, Pixbuf pixbuf, uint jpegQuality)
+		{
+			// FIXME: this needs to work on streams rather than filenames. Do that when we switch to
+			// newer GDK.
+			var extension = destination.GetExtension ().ToLower ();
+			if (extension == ".png")
+				pixbuf.Save (destination.LocalPath, "png");
+			else if (extension == ".jpg" || extension == ".jpeg")
+				pixbuf.Save (destination.LocalPath, "jpeg", jpegQuality);
+			else
+				throw new NotImplementedException ("Saving this file format is not supported");
+		}
+
 		#endregion
 	}
 }
