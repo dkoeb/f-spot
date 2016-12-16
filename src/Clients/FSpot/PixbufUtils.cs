@@ -517,7 +517,7 @@ public static class PixbufUtils
 		// Else make a derived copy with metadata copied
 		using (var img = App.Instance.Container.Resolve<IImageFileFactory> ().Create (source)) {
 			using (var pixbuf = img.Load ()) {
-				FSpot.Utils.PixbufUtils.CreateDerivedVersion (source, destination, jpeg_quality, pixbuf);
+				App.Instance.Container.Resolve<IImageFileFactory>().CreateDerivedVersion (source, destination, jpeg_quality, pixbuf);
 			}
 		}
 	}
