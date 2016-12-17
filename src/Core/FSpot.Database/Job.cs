@@ -33,12 +33,13 @@ using System;
 using Banshee.Kernel;
 using FSpot.Core;
 using FSpot.Jobs;
+using FSpot.Utils;
 
 namespace FSpot.Database
 {
 	public abstract class Job : DbItem, IJob
 	{
-		protected Job (IDb db, uint id, string job_options, JobPriority job_priority, DateTime run_at, bool persistent)
+		protected Job (TinyIoCContainer container, IDb db, uint id, string job_options, JobPriority job_priority, DateTime run_at, bool persistent)
 			: base (id)
 		{
 			JobOptions = job_options;
@@ -46,6 +47,7 @@ namespace FSpot.Database
 			RunAt = run_at;
 			Persistent = persistent;
 			Db = db;
+			Container = container;
 		}
 
 		public string JobOptions { get; set; }
@@ -54,6 +56,7 @@ namespace FSpot.Database
 		public DateTime RunAt { get; private set; }
 		public bool Persistent { get; private set; }
 		protected IDb Db { get; private set; }
+		protected TinyIoCContainer Container { get; private set; }
 
 		public event EventHandler Finished;
 

@@ -31,14 +31,12 @@
 
 using System;
 using System.IO;
-
-using Hyena;
-
 using FSpot.Imaging;
 using FSpot.Thumbnail;
+using FSpot.Utils;
+using Hyena;
 
 // A Store maps to a SQL table.  We have separate stores (i.e. SQL tables) for tags, photos and imports.
-
 namespace FSpot.Database
 {
 	// The Database puts the stores together.
@@ -47,8 +45,7 @@ namespace FSpot.Database
 		string path;
 		bool disposed;
 
-		readonly IImageFileFactory imageFileFactory;
-		readonly IThumbnailService thumbnailService;
+		readonly TinyIoCContainer container;
 		readonly IUpdaterUI updaterDialog;
 
 		public bool Empty { get; private set; }
@@ -72,10 +69,9 @@ namespace FSpot.Database
 
 		#region ctors
 
-		public Db (IImageFileFactory imageFileFactory, IThumbnailService thumbnailService, IUpdaterUI updaterDialog)
+		public Db (TinyIoCContainer container, IUpdaterUI updaterDialog)
 		{
-			this.imageFileFactory = imageFileFactory;
-			this.thumbnailService = thumbnailService;
+			this.container = container;
 			this.updaterDialog = updaterDialog;
 		}
 
@@ -115,10 +111,13 @@ namespace FSpot.Database
 
 			Database.BeginTransaction ();
 
+			var imageFileFactory = container.Resolve<IImageFileFactory> ();
+			var thumbnailService = container.Resolve<IThumbnailService> ();
+
 			Tags = new TagStore (this, new_db);
 			Rolls = new RollStore (this, new_db);
 			Exports = new ExportStore (this, new_db);
-			Jobs = new JobStore (this, new_db);
+			Jobs = new JobStore (container, this, new_db);
 			Photos = new PhotoStore (imageFileFactory, thumbnailService, this, new_db);
 
 			Database.CommitTransaction ();
