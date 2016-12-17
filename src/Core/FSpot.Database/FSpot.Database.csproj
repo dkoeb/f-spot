@@ -98,6 +98,7 @@
     <Compile Include="Jobs\CalculateHashJob.cs" />
     <Compile Include="Jobs\SyncMetadataJob.cs" />
     <Compile Include="IDb.cs" />
+    <Compile Include="Job.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Jobs\" />
