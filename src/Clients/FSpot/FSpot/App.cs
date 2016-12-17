@@ -92,7 +92,7 @@ namespace FSpot
 						if (!File.Exists (Global.BaseDirectory))
 							Directory.CreateDirectory (Global.BaseDirectory);
 
-						db = new Db (Container.Resolve<IImageFileFactory> (), Container.Resolve<IThumbnailService> (), new UpdaterUI ());
+						db = new Db (Container, new UpdaterUI ());
 
 						try {
 							db.Init (Path.Combine (Global.BaseDirectory, "photos.db"), true);

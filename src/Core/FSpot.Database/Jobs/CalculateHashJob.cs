@@ -30,23 +30,22 @@
 //
 
 using System;
-
 using Banshee.Kernel;
-
 using FSpot.Database;
-
+using FSpot.Utils;
 using Hyena;
 
-namespace FSpot.Database.Jobs {
+namespace FSpot.Database.Jobs
+{
 	public class CalculateHashJob : Job
 	{
-		public CalculateHashJob (IDb db, uint id, string job_options, int run_at, JobPriority job_priority, bool persistent)
-			: this (db, id, job_options, DateTimeUtil.ToDateTime (run_at), job_priority, persistent)
+		public CalculateHashJob (TinyIoCContainer container, IDb db, uint id, string job_options, int run_at, JobPriority job_priority, bool persistent)
+			: this (container, db, id, job_options, DateTimeUtil.ToDateTime (run_at), job_priority, persistent)
 		{
 		}
 
-		public CalculateHashJob (IDb db, uint id, string job_options, DateTime run_at, JobPriority job_priority, bool persistent)
-			: base (db, id, job_options, job_priority, run_at, persistent)
+		public CalculateHashJob (TinyIoCContainer container, IDb db, uint id, string job_options, DateTime run_at, JobPriority job_priority, bool persistent)
+			: base (container, db, id, job_options, job_priority, run_at, persistent)
 		{
 		}
 
@@ -67,7 +66,7 @@ namespace FSpot.Database.Jobs {
 				Photo photo = Db.Photos.Get (Convert.ToUInt32 (photo_id));
 				Db.Photos.CalculateMD5Sum (photo);
 				return true;
-			} catch (System.Exception e) {
+			} catch (Exception e) {
 				Log.DebugFormat ("Error Calculating Hash for photo {0}: {1}", JobOptions, e.Message);
 			}
 			return false;

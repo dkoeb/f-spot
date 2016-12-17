@@ -32,6 +32,7 @@
 using System;
 using Banshee.Kernel;
 using FSpot.Jobs;
+using FSpot.Utils;
 using Hyena;
 using Hyena.Data.Sqlite;
 
@@ -39,6 +40,8 @@ namespace FSpot.Database
 {
 	public class JobStore : DbStore<Job>
 	{
+		private readonly TinyIoCContainer container;
+
 		internal static void CreateTable (FSpotDatabaseConnection database)
 		{
 			if (database.TableExists ("jobs")) {
@@ -59,6 +62,7 @@ namespace FSpot.Database
 		{
 			return (Job) Activator.CreateInstance (
 				Type.GetType (reader ["job_type"].ToString ()),
+				container,
 				Db,
 				Convert.ToUInt32 (reader["id"]),
 				reader["job_options"].ToString (),
@@ -103,7 +107,7 @@ namespace FSpot.Database
 					DateTimeUtil.FromDateTime (run_at),
 					Convert.ToInt32 (job_priority)));
 
-			var job = (Job)Activator.CreateInstance (job_type, Db, (uint) id, job_options, run_at, job_priority, true);
+			var job = (Job)Activator.CreateInstance (job_type, container, Db, (uint) id, job_options, run_at, job_priority, true);
 
 			AddToCache (job);
 			job.Finished += HandleRemoveJob;
@@ -154,8 +158,10 @@ namespace FSpot.Database
 			Remove (o as Job);
 		}
 
-		public JobStore (IDb db, bool is_new) : base (db, true)
+		public JobStore (TinyIoCContainer container, IDb db, bool is_new) : base (db, true)
 		{
+			this.container = container;
+
 			if (is_new || !Database.TableExists ("jobs")) {
 				CreateTable (Database);
 			} else {

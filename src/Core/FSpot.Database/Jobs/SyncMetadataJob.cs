@@ -30,26 +30,25 @@
 //
 
 using System;
-
 using Banshee.Kernel;
-
-using Hyena;
-
 using FSpot.Core;
+using FSpot.Database;
 using FSpot.Imaging;
 using FSpot.Settings;
+using FSpot.Utils;
+using Hyena;
 
 namespace FSpot.Database.Jobs
 {
 	public class SyncMetadataJob : Job
 	{
-		public SyncMetadataJob (IDb db, uint id, string jobOptions, int runAt, JobPriority jobPriority, bool persistent)
-			: this (db, id, jobOptions, DateTimeUtil.ToDateTime (runAt), jobPriority, persistent)
+		public SyncMetadataJob (TinyIoCContainer container, IDb db, uint id, string jobOptions, int runAt, JobPriority jobPriority, bool persistent)
+			: this (container, db, id, jobOptions, DateTimeUtil.ToDateTime (runAt), jobPriority, persistent)
 		{
 		}
 
-		public SyncMetadataJob (IDb db, uint id, string jobOptions, DateTime runAt, JobPriority jobPriority, bool persistent)
-			: base (db, id, jobOptions, jobPriority, runAt, persistent)
+		public SyncMetadataJob (TinyIoCContainer container, IDb db, uint id, string jobOptions, DateTime runAt, JobPriority jobPriority, bool persistent)
+			: base (container, db, id, jobOptions, jobPriority, runAt, persistent)
 		{
 		}
 
