@@ -39,63 +39,66 @@ using FSpot.Core;
 using FSpot.Imaging;
 using FSpot.Settings;
 
-namespace FSpot.Database.Jobs {
-    public class SyncMetadataJob : Job
-    {
-        public SyncMetadataJob (IDb db, uint id, string job_options, int run_at, JobPriority job_priority, bool persistent) : this (db, id, job_options, DateTimeUtil.ToDateTime (run_at), job_priority, persistent)
-        {
-        }
+namespace FSpot.Database.Jobs
+{
+	public class SyncMetadataJob : Job
+	{
+		public SyncMetadataJob (IDb db, uint id, string jobOptions, int runAt, JobPriority jobPriority, bool persistent)
+			: this (db, id, jobOptions, DateTimeUtil.ToDateTime (runAt), jobPriority, persistent)
+		{
+		}
 
-        public SyncMetadataJob (IDb db, uint id, string job_options, DateTime run_at, JobPriority job_priority, bool persistent) : base (db, id, job_options, job_priority, run_at, persistent)
-        {
-        }
+		public SyncMetadataJob (IDb db, uint id, string jobOptions, DateTime runAt, JobPriority jobPriority, bool persistent)
+			: base (db, id, jobOptions, jobPriority, runAt, persistent)
+		{
+		}
 
-        //Use THIS static method to create a job...
-        public static SyncMetadataJob Create (JobStore job_store, Photo photo)
-        {
-            return (SyncMetadataJob) job_store.CreatePersistent (typeof (SyncMetadataJob), photo.Id.ToString ());
-        }
+		//Use THIS static method to create a job...
+		public static SyncMetadataJob Create (JobStore jobStore, Photo photo)
+		{
+			return (SyncMetadataJob) jobStore.CreatePersistent (typeof (SyncMetadataJob), photo.Id.ToString ());
+		}
 
-        protected override bool Execute ()
-        {
-            //this will add some more reactivity to the system
-            System.Threading.Thread.Sleep (500);
+		protected override bool Execute ()
+		{
+			//this will add some more reactivity to the system
+			System.Threading.Thread.Sleep (500);
 
-            try {
-                Photo photo = Db.Photos.Get (Convert.ToUInt32 (JobOptions));
-                if (photo == null)
-                    return false;
+			try {
+				Photo photo = Db.Photos.Get (Convert.ToUInt32 (JobOptions));
+				if (photo == null)
+					return false;
 
-                Log.DebugFormat ("Syncing metadata to file ({0})...", photo.DefaultVersion.Uri);
+				Log.DebugFormat ("Syncing metadata to file ({0})...", photo.DefaultVersion.Uri);
 
-                WriteMetadataToImage (photo);
-                return true;
-            } catch (System.Exception e) {
-                Log.ErrorFormat ("Error syncing metadata to file\n{0}", e);
-            }
-            return false;
-        }
+				WriteMetadataToImage (photo);
+				return true;
+			} catch (Exception e) {
+				Log.ErrorFormat ("Error syncing metadata to file\n{0}", e);
+			}
+			return false;
+		}
 
-        void WriteMetadataToImage (Photo photo)
-        {
-            Tag [] tags = photo.Tags;
-            string [] names = new string [tags.Length];
+		static void WriteMetadataToImage (IPhoto photo)
+		{
+			Tag [] tags = photo.Tags;
+			var names = new string [tags.Length];
 
-            for (int i = 0; i < tags.Length; i++)
-                names [i] = tags [i].Name;
+			for (int i = 0; i < tags.Length; i++)
+				names [i] = tags [i].Name;
 
-            using (var metadata = MetadataService.Parse (photo.DefaultVersion.Uri)) {
-                metadata.EnsureAvailableTags ();
+			using (var metadata = MetadataService.Parse (photo.DefaultVersion.Uri)) {
+				metadata.EnsureAvailableTags ();
 
-                metadata.DateTime = photo.Time;
-                metadata.Comment = photo.Description ?? string.Empty;
-                metadata.Keywords = names;
-                metadata.Rating = photo.Rating;
-                metadata.Software = Defines.PACKAGE + " version " + Defines.VERSION;
+				metadata.DateTime = photo.Time;
+				metadata.Comment = photo.Description ?? string.Empty;
+				metadata.Keywords = names;
+				metadata.Rating = photo.Rating;
+				metadata.Software = Defines.PACKAGE + " version " + Defines.VERSION;
 
-                var always_sidecar = Preferences.Get<bool> (Preferences.METADATA_ALWAYS_USE_SIDECAR);
-                metadata.SaveSafely (photo.DefaultVersion.Uri, always_sidecar);
-            }
-        }
-    }
+				var alwaysSidecar = Preferences.Get<bool> (Preferences.METADATA_ALWAYS_USE_SIDECAR);
+				metadata.SaveSafely (photo.DefaultVersion.Uri, alwaysSidecar);
+			}
+		}
+	}
 }
