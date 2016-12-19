@@ -15,7 +15,7 @@ NUNIT_CONSOLE = $$(echo ../packages/NUnit.Runners.*/tools/nunit-console.exe)
 
 test:
 	@chmod +x $(NUNIT_CONSOLE); \
-	$(NUNIT_CONSOLE) --labels $(TEST_ASSEMBLIES);
+	$(NUNIT_CONSOLE) --labels --domain=Single $(TEST_ASSEMBLIES);
 
 endif
 
