@@ -39,6 +39,7 @@ namespace FSpot.FileSystem
 		void Move (SafeUri source, SafeUri destinatoin, bool overwrite);
 		void Delete (SafeUri uri);
 		string GetMimeType (SafeUri uri);
+		ulong GetCTime (SafeUri uri);
 		ulong GetMTime (SafeUri uri);
 		long GetSize (SafeUri uri);
 		Stream Read (SafeUri uri);
