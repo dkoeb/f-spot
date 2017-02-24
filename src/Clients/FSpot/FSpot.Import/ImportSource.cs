@@ -26,8 +26,8 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+using System.Collections.Generic;
 using FSpot.FileSystem;
-using FSpot.Imaging;
 using FSpot.Utils;
 using Hyena;
 
@@ -67,9 +67,9 @@ namespace FSpot.Import
 
 		#region public API
 
-		public virtual IImportSource GetFileImportSource (IImageFileFactory factory, IFileSystem fileSystem)
+		public virtual IImportSource GetFileImportSource (IEnumerable<IFileImporter> fileImporters, IFileSystem fileSystem)
 		{
-			return new FileImportSource (Root, factory, fileSystem);
+			return new FileImportSource (Root, fileImporters, fileSystem);
 		}
 
 		#endregion

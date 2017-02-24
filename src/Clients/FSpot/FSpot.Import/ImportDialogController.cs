@@ -36,6 +36,7 @@ using FSpot.Core;
 using FSpot.Database;
 using FSpot.FileSystem;
 using FSpot.Imaging;
+using FSpot.Photos;
 using FSpot.Settings;
 using Gtk;
 using Hyena;
@@ -215,13 +216,16 @@ namespace FSpot.Import
 				return;
 			}
 
-			var source = activeSource.GetFileImportSource (
+			var importer = new PhotoImporter (
 				App.Instance.Container.Resolve<IImageFileFactory> (),
+				mergeRawAndJpeg);
+			var source = activeSource.GetFileImportSource (
+				new [] { importer },
 				App.Instance.Container.Resolve<IFileSystem> ());
 			Photos.Clear ();
 
 			scanTokenSource = new CancellationTokenSource ();
-			scanThread = ThreadAssist.Spawn (() => DoScan (source, recurseSubdirectories, mergeRawAndJpeg, scanTokenSource.Token));
+			scanThread = ThreadAssist.Spawn (() => DoScan (source, recurseSubdirectories, scanTokenSource.Token));
 		}
 
 		void CancelScan ()
@@ -242,11 +246,11 @@ namespace FSpot.Import
 			}
 		}
 
-		void DoScan (IImportSource source, bool recurse, bool merge, CancellationToken token)
+		void DoScan (IImportSource source, bool recurse, CancellationToken token)
 		{
 			FireEvent (ImportEvent.PhotoScanStarted);
 
-			foreach (var info in source.ScanPhotos (recurse, merge)) {
+			foreach (var info in source.ScanPhotos (recurse)) {
 				ThreadAssist.ProxyToMain (() => Photos.Add (info));
 				if (token.IsCancellationRequested)
 					break;

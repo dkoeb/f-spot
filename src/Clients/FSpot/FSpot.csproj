@@ -392,6 +392,10 @@
       <Project>{02523C56-7715-4B6E-891B-6A1CBDE1B98C}</Project>
       <Name>FSpot.Import</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\FSpot.Photos\FSpot.Photos.csproj">
+      <Project>{6ACC079F-8D46-4F91-AE3C-B603B5F2410D}</Project>
+      <Name>FSpot.Photos</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="FSpot\" />

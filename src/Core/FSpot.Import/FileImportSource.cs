@@ -30,11 +30,10 @@
 //
 
 using System.Collections.Generic;
+using System.Linq;
 using FSpot.Core;
 using FSpot.FileSystem;
-using FSpot.Imaging;
 using Hyena;
-using Mono.Unix;
 
 namespace FSpot.Import
 {
@@ -43,92 +42,50 @@ namespace FSpot.Import
 		#region fields
 
 		readonly SafeUri root;
+		readonly IEnumerable<IFileImporter> fileImporters;
 		readonly IFileSystem fileSystem;
-		readonly IImageFileFactory factory;
 
 		#endregion
 
 		#region ctors
 
-		public FileImportSource (SafeUri root, IImageFileFactory factory, IFileSystem fileSystem)
+		public FileImportSource (SafeUri root, IEnumerable<IFileImporter> fileImporters, IFileSystem fileSystem)
 		{
 			this.root = root;
+			this.fileImporters = fileImporters;
 			this.fileSystem = fileSystem;
-			this.factory = factory;
 		}
 
 		#endregion
 
 		#region IImportSource
 
-		public virtual IEnumerable<FilePhoto> ScanPhotos (bool recurseSubdirectories, bool mergeRawAndJpeg)
+		public virtual IEnumerable<FilePhoto> ScanPhotos (bool recurseSubdirectories)
 		{
-			return ScanPhotoDirectory (recurseSubdirectories, mergeRawAndJpeg, root);
+			return ScanPhotoDirectory (recurseSubdirectories, root);
 		}
 
 		#endregion
 
 		#region private
 
-		protected IEnumerable<FilePhoto> ScanPhotoDirectory (bool recurseSubdirectories, bool mergeRawAndJpeg, SafeUri uri)
+		protected IEnumerable<FilePhoto> ScanPhotoDirectory (bool recurseSubdirectories, SafeUri uri)
 		{
-			var enumerator = (new RecursiveFileEnumerator (uri, fileSystem) {
+			IEnumerable<SafeUri> files = new RecursiveFileEnumerator (uri, fileSystem) {
 				Recurse = recurseSubdirectories,
 				CatchErrors = true,
 				IgnoreSymlinks = true
-			}).GetEnumerator ();
+			};
 
-			SafeUri file = null;
+			IEnumerable<FilePhoto> result = Enumerable.Empty<FilePhoto> ();
 
-			while (true) {
-				if (file == null) {
-					file = NextImageFileOrNull(enumerator);
-					if (file == null)
-						break;
-				}
-
-				// peek the next file to see if we have a RAW+JPEG combination
-				// skip any non-image files
-				SafeUri nextFile = NextImageFileOrNull(enumerator);
-
-				SafeUri original;
-				SafeUri version = null;
-				if (mergeRawAndJpeg && nextFile != null && factory.IsJpegRawPair (file, nextFile)) {
-					// RAW+JPEG: import as one photo with versions
-					original = factory.IsRaw (file) ? file : nextFile;
-					version = factory.IsRaw (file) ? nextFile : file;
-					// current and next files consumed in this iteration,
-					// prepare to get next file on next iteration
-					file = null;
-				} else {
-					// import current file as single photo
-					original = file;
-					// forward peeked file to next iteration of loop
-					file = nextFile;
-				}
-
-				FilePhoto info;
-				if (version == null) {
-					info  = new FilePhoto (original, Catalog.GetString ("Original"), factory);
-				} else {
-					info  = new FilePhoto (original, Catalog.GetString ("Original RAW"), factory);
-					info.AddVersion (version, Catalog.GetString ("Original JPEG"));
-				}
-
-				yield return info;
+			foreach (var importer in fileImporters) {
+				IEnumerable<SafeUri> remainingFiles;
+				result = result.Concat (importer.Import (files, out remainingFiles));
+				files = remainingFiles;
 			}
-		}
 
-		SafeUri NextImageFileOrNull(IEnumerator<SafeUri> enumerator)
-		{
-			SafeUri nextImageFile;
-			do {
-				if (enumerator.MoveNext ())
-					nextImageFile = enumerator.Current;
-				else
-					return null;
-			} while (!factory.HasLoader (nextImageFile));
-			return nextImageFile;
+			return result;
 		}
 
 		#endregion
