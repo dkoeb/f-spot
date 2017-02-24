@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6ACC079F-8D46-4F91-AE3C-B603B5F2410D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>FSpot.Photos</RootNamespace>
+    <AssemblyName>FSpot.Photos</AssemblyName>
+    <ReleaseVersion>0.9.0</ReleaseVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>..\..\..\bin</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>..\..\..\bin</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="Mono.Posix" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\FSpot.Import\FSpot.Import.csproj">
+      <Project>{02523C56-7715-4B6E-891B-6A1CBDE1B98C}</Project>
+      <Name>FSpot.Import</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FSpot.Utils\FSpot.Utils.csproj">
+      <Project>{CE160879-1BF0-4711-A18F-FDA2772900FA}</Project>
+      <Name>FSpot.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FSpot.Imaging\FSpot.Imaging.csproj">
+      <Project>{69C1F628-6CB4-4446-96AC-57810DD57594}</Project>
+      <Name>FSpot.Imaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FSpot.Core\FSpot.Core.csproj">
+      <Project>{57EDC3BC-E777-4400-B4E7-32A5D8F15A76}</Project>
+      <Name>FSpot.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\lib\Hyena\Hyena\Hyena.csproj">
+      <Project>{95374549-9553-4C1E-9D89-667755F90E12}</Project>
+      <Name>Hyena</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="PhotoImporter.cs" />
+  </ItemGroup>
+</Project>

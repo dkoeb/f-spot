@@ -34,7 +34,6 @@
 using System.Collections.Generic;
 using FSpot.Core;
 using FSpot.FileSystem;
-using FSpot.Imaging;
 using Hyena;
 
 namespace FSpot.Import
@@ -44,17 +43,17 @@ namespace FSpot.Import
 	{
 		readonly IEnumerable<SafeUri> uris;
 
-		public MultiFileImportSource (IEnumerable<SafeUri> uris, IImageFileFactory factory, IFileSystem fileSystem)
-			: base (null, factory, fileSystem)
+		public MultiFileImportSource (IEnumerable<SafeUri> uris, IEnumerable<IFileImporter> fileImporters, IFileSystem fileSystem)
+			: base (null, fileImporters, fileSystem)
 		{
 			this.uris = uris;
 		}
 
-		public override IEnumerable<FilePhoto> ScanPhotos (bool recurseSubdirectories, bool mergeRawAndJpeg)
+		public override IEnumerable<FilePhoto> ScanPhotos (bool recurseSubdirectories)
 		{
 			foreach (var uri in uris) {
 				Log.Debug ("Scanning " + uri);
-				foreach (var info in ScanPhotoDirectory (recurseSubdirectories, mergeRawAndJpeg, uri)) {
+				foreach (var info in ScanPhotoDirectory (recurseSubdirectories, uri)) {
 					yield return info;
 				}
 			}
