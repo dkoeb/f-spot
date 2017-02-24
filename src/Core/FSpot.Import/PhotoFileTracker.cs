@@ -26,7 +26,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System;
 using System.Collections.Generic;
 using FSpot.Core;
 using FSpot.FileSystem;
@@ -35,7 +34,7 @@ using Hyena;
 
 namespace FSpot.Import
 {
-	public class PhotoFileTracker
+	class PhotoFileTracker
 	{
 		readonly IFileSystem file_system;
 
