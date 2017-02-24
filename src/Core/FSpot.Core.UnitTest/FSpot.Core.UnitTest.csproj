@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -50,9 +50,17 @@
       <Project>{95374549-9553-4C1E-9D89-667755F90E12}</Project>
       <Name>Hyena</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FSpot.FileSystem\FSpot.FileSystem.csproj">
+      <Project>{F7821E0B-6861-47D7-9FCE-F853CDF2F838}</Project>
+      <Name>FSpot.FileSystem</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FSpot.Imaging\FSpot.Imaging.csproj">
       <Project>{69c1f628-6cb4-4446-96ac-57810dd57594}</Project>
       <Name>FSpot.Imaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FSpot.Photos\FSpot.Photos.csproj">
+      <Project>{6ACC079F-8D46-4F91-AE3C-B603B5F2410D}</Project>
+      <Name>FSpot.Photos</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -26,6 +26,7 @@
 
 using FSpot.Core.UnitTest.Mocks;
 using FSpot.Imaging;
+using FSpot.Photos;
 using Hyena;
 using Moq;
 using NUnit.Framework;
@@ -36,9 +37,9 @@ namespace FSpot.Core.UnitTest
     public class BrowsablePointerTests
     {
         static readonly IImageFileFactory factory = Mock.Of<IImageFileFactory> ();
-        readonly IPhoto photo1 = new FilePhoto (new SafeUri ("/1"), factory);
-        readonly IPhoto photo2 = new FilePhoto (new SafeUri ("/2"), factory);
-        readonly IPhoto photo3 = new FilePhoto (new SafeUri ("/3"), factory);
+        readonly IPhoto photo1 = new FilePhoto (new SafeUri ("/1"), factory, null);
+        readonly IPhoto photo2 = new FilePhoto (new SafeUri ("/2"), factory, null);
+        readonly IPhoto photo3 = new FilePhoto (new SafeUri ("/3"), factory, null);
 
         [Test]
         public void BrowsablePointer_IndexIsNullForEmptyCollection ()
