@@ -28,6 +28,7 @@
 
 using System.Collections.Generic;
 using FSpot.Core;
+using FSpot.FileSystem;
 using FSpot.Imaging;
 using FSpot.Import;
 using Hyena;
@@ -37,23 +38,25 @@ namespace FSpot.Photos
 {
 	public class PhotoImporter : IFileImporter
 	{
+		readonly IFileSystem fileSystem;
 		readonly IImageFileFactory factory;
 		readonly bool mergeRawAndJpeg;
 
-		public PhotoImporter (IImageFileFactory factory, bool mergeRawAndJpeg)
+		public PhotoImporter (IFileSystem fileSystem, IImageFileFactory factory, bool mergeRawAndJpeg)
 		{
+			this.fileSystem = fileSystem;
 			this.factory = factory;
 			this.mergeRawAndJpeg = mergeRawAndJpeg;
 		}
 
-		public IEnumerable<FilePhoto> Import (IEnumerable<SafeUri> files, out IEnumerable<SafeUri> remainingFiles)
+		public IEnumerable<IMediaFile> Import (IEnumerable<SafeUri> files, out IEnumerable<SafeUri> remainingFiles)
 		{
 			var list = new List<SafeUri> ();
 			remainingFiles = list;
 			return ImportInternal (files, list);
 		}
 
-		IEnumerable<FilePhoto> ImportInternal (IEnumerable<SafeUri> files, List<SafeUri> remainingFiles)
+		IEnumerable<IMediaFile> ImportInternal (IEnumerable<SafeUri> files, List<SafeUri> remainingFiles)
 		{
 			var enumerator = files.GetEnumerator ();
 			SafeUri file = null;
@@ -87,9 +90,9 @@ namespace FSpot.Photos
 
 				FilePhoto info;
 				if (version == null) {
-					info = new FilePhoto (original, Catalog.GetString ("Original"), factory);
+					info = new FilePhoto (original, Catalog.GetString ("Original"), factory, fileSystem);
 				} else {
-					info = new FilePhoto (original, Catalog.GetString ("Original RAW"), factory);
+					info = new FilePhoto (original, Catalog.GetString ("Original RAW"), factory, fileSystem);
 					info.AddVersion (version, Catalog.GetString ("Original JPEG"));
 				}
 

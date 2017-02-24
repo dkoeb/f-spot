@@ -30,30 +30,34 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FSpot.Core;
+using FSpot.FileSystem;
 using FSpot.Imaging;
 using FSpot.Utils;
 using Hyena;
 using Mono.Unix.Native;
 
-namespace FSpot.Core
+namespace FSpot.Photos
 {
-	public class FilePhoto : IPhoto, IInvalidPhotoCheck
+	public class FilePhoto : IPhoto, IInvalidPhotoCheck, IMediaFile
 	{
 		bool metadata_parsed;
 
 		readonly IImageFileFactory imageFileFactory;
 		readonly List<IPhotoVersion> versions;
+		readonly IFileSystem fileSystem;
 
-		public FilePhoto (SafeUri uri, IImageFileFactory imageFileFactory) : this (uri, null, imageFileFactory)
+		public FilePhoto (SafeUri uri, IImageFileFactory imageFileFactory, IFileSystem fileSystem) : this (uri, null, imageFileFactory, fileSystem)
 		{
 		}
 
-		public FilePhoto (SafeUri uri, string name, IImageFileFactory imageFileFactory)
+		public FilePhoto (SafeUri uri, string name, IImageFileFactory imageFileFactory, IFileSystem fileSystem)
 		{
 			versions = new List<IPhotoVersion> ();
 			versions.Add (new FilePhotoVersion { Uri = uri, Name = name });
 
 			this.imageFileFactory = imageFileFactory;
+			this.fileSystem = fileSystem;
 		}
 
 		public bool IsInvalid {
@@ -91,8 +95,8 @@ namespace FSpot.Core
 
 		DateTime CreateDate {
 			get {
-				var info = GLib.FileFactory.NewForUri (DefaultVersion.Uri).QueryInfo ("time::changed", GLib.FileQueryInfoFlags.None, null);
-				return NativeConvert.ToDateTime ((long)info.GetAttributeULong ("time::changed"));
+				var cTime = fileSystem.File.GetCTime (DefaultVersion.Uri);
+				return NativeConvert.ToDateTime ((long)cTime);
 			}
 		}
 

@@ -31,13 +31,12 @@
 
 using System.Collections.Generic;
 using System.Xml;
-
-using Hyena;
-
-using GLib;
-
 using FSpot.Core;
+using FSpot.FileSystem;
 using FSpot.Imaging;
+using FSpot.Photos;
+using GLib;
+using Hyena;
 
 namespace FSpot
 {
@@ -63,8 +62,9 @@ namespace FSpot
 		public void Add (SafeUri uri)
 		{
 			if (App.Instance.Container.Resolve<IImageFileFactory> ().HasLoader (uri)) {
+				var fileSystem = App.Instance.Container.Resolve<IFileSystem> ();
 				//Console.WriteLine ("using image loader {0}", uri.ToString ());
-				Add (new FilePhoto (uri, imageFileFactory));
+				Add (new FilePhoto (uri, imageFileFactory, fileSystem));
 			} else {
 				var info = FileFactory.NewForUri (uri).QueryInfo ("standard::type,standard::content-type", FileQueryInfoFlags.None, null);
 
@@ -100,12 +100,14 @@ namespace FSpot
 				ns.AddNamespace ("pheed", "http://www.pheed.com/pheed/");
 				ns.AddNamespace ("apple", "http://www.apple.com/ilife/wallpapers");
 
+				var fileSystem = App.Instance.Container.Resolve<IFileSystem> ();
+
 				var items = new List<FilePhoto> ();
 				XmlNodeList list = doc.SelectNodes ("/rss/channel/item/media:content", ns);
 				foreach (XmlNode item in list) {
 					SafeUri image_uri = new SafeUri (item.Attributes ["url"].Value);
 					Hyena.Log.DebugFormat ("flickr uri = {0}", image_uri.ToString ());
-					items.Add (new FilePhoto (image_uri, imageFileFactory));
+					items.Add (new FilePhoto (image_uri, imageFileFactory, fileSystem));
 				}
 
 				if (list.Count < 1) {
@@ -113,7 +115,7 @@ namespace FSpot
 					foreach (XmlNode item in list) {
 						SafeUri image_uri = new SafeUri (item.InnerText.Trim ());
 						Hyena.Log.DebugFormat ("pheed uri = {0}", uri);
-						items.Add (new FilePhoto (image_uri, imageFileFactory));
+						items.Add (new FilePhoto (image_uri, imageFileFactory, fileSystem));
 					}
 				}
 
@@ -122,7 +124,7 @@ namespace FSpot
 					foreach (XmlNode item in list) {
 						SafeUri image_uri = new SafeUri (item.InnerText.Trim ());
 						Hyena.Log.DebugFormat ("apple uri = {0}", uri);
-						items.Add (new FilePhoto (image_uri, imageFileFactory));
+						items.Add (new FilePhoto (image_uri, imageFileFactory, fileSystem));
 					}
 				}
 				collection.Add (items.ToArray ());
@@ -150,12 +152,14 @@ namespace FSpot
 
 			void InfoLoaded (GLib.Object o, GLib.AsyncResult res)
 			{
+				var fileSystem = App.Instance.Container.Resolve<IFileSystem> ();
+
 				var items = new List<FilePhoto> ();
 				foreach (GLib.FileInfo info in file.EnumerateChildrenFinish (res)) {
 					SafeUri i = new SafeUri (file.GetChild (info.Name).Uri);
 					Hyena.Log.DebugFormat ("testing uri = {0}", i);
 					if (App.Instance.Container.Resolve<IImageFileFactory> ().HasLoader (i))
-						items.Add (new FilePhoto (i, imageFileFactory));
+						items.Add (new FilePhoto (i, imageFileFactory, fileSystem));
 				}
 				ThreadAssist.ProxyToMain (() => collection.Add (items.ToArray ()));
 			}
@@ -163,11 +167,13 @@ namespace FSpot
 
 		protected void LoadItems (System.IO.FileInfo [] files)
 		{
+			var fileSystem = App.Instance.Container.Resolve<IFileSystem> ();
+
 			var items = new List<IPhoto> ();
 			foreach (var f in files) {
 				if (App.Instance.Container.Resolve<IImageFileFactory> ().HasLoader (new SafeUri (f.FullName))) {
 					Hyena.Log.Debug (f.FullName);
-					items.Add (new FilePhoto (new SafeUri (f.FullName), imageFileFactory));
+					items.Add (new FilePhoto (new SafeUri (f.FullName), imageFileFactory, fileSystem));
 				}
 			}
 

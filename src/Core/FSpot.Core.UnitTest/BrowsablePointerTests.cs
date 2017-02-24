@@ -24,9 +24,8 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System.Collections.Generic;
-using System.Linq;
 using FSpot.Core.UnitTest.Mocks;
+using FSpot.Photos;
 using Hyena;
 using NUnit.Framework;
 
@@ -35,9 +34,9 @@ namespace FSpot.Core.UnitTest
     [TestFixture]
     public class BrowsablePointerTests
     {
-        readonly IPhoto photo1 = new FilePhoto(new SafeUri("/1"), null);
-        readonly IPhoto photo2 = new FilePhoto(new SafeUri("/2"), null);
-        readonly IPhoto photo3 = new FilePhoto(new SafeUri("/3"), null);
+        readonly IPhoto photo1 = new FilePhoto(new SafeUri("/1"), null, null);
+        readonly IPhoto photo2 = new FilePhoto(new SafeUri("/2"), null, null);
+        readonly IPhoto photo3 = new FilePhoto(new SafeUri("/3"), null, null);
 
         [Test]
         public void BrowsablePointer_IndexIsNullForEmptyCollection ()

@@ -49,7 +49,7 @@ namespace FSpot.Import
 			this.uris = uris;
 		}
 
-		public override IEnumerable<FilePhoto> ScanPhotos (bool recurseSubdirectories)
+		public override IEnumerable<IMediaFile> ScanPhotos (bool recurseSubdirectories)
 		{
 			foreach (var uri in uris) {
 				Log.Debug ("Scanning " + uri);

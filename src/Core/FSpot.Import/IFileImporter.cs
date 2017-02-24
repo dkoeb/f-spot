@@ -34,6 +34,6 @@ namespace FSpot.Import
 {
 	public interface IFileImporter
 	{
-		IEnumerable<FilePhoto> Import (IEnumerable<SafeUri> files, out IEnumerable<SafeUri> remainingFiles);
+		IEnumerable<IMediaFile> Import (IEnumerable<SafeUri> files, out IEnumerable<SafeUri> remainingFiles);
 	}
 }

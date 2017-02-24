@@ -1,15 +1,10 @@
-//
-// IImportSource.cs
+﻿//
+// IMediaFile.cs
 //
 // Author:
-//   Mike Gemünde <mike@gemuende.de>
-//   Ruben Vermeersch <ruben@savanne.be>
 //   Daniel Köb <daniel.koeb@peony.at>
 //
-// Copyright (C) 2010 Novell, Inc.
-// Copyright (C) 2010 Mike Gemünde
-// Copyright (C) 2010 Ruben Vermeersch
-// Copyright (C) 2014 Daniel Köb
+// Copyright (C) 2017 Daniel Köb
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -31,13 +26,9 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System.Collections.Generic;
-using FSpot.Core;
-
-namespace FSpot.Import
+namespace FSpot.Core
 {
-	public interface IImportSource
+	public interface IMediaFile
 	{
-		IEnumerable<IMediaFile> ScanPhotos (bool recurseSubdirectories);
 	}
 }

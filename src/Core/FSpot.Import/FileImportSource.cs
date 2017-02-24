@@ -60,7 +60,7 @@ namespace FSpot.Import
 
 		#region IImportSource
 
-		public virtual IEnumerable<FilePhoto> ScanPhotos (bool recurseSubdirectories)
+		public virtual IEnumerable<IMediaFile> ScanPhotos (bool recurseSubdirectories)
 		{
 			return ScanPhotoDirectory (recurseSubdirectories, root);
 		}
@@ -69,7 +69,7 @@ namespace FSpot.Import
 
 		#region private
 
-		protected IEnumerable<FilePhoto> ScanPhotoDirectory (bool recurseSubdirectories, SafeUri uri)
+		protected IEnumerable<IMediaFile> ScanPhotoDirectory (bool recurseSubdirectories, SafeUri uri)
 		{
 			IEnumerable<SafeUri> files = new RecursiveFileEnumerator (uri, fileSystem) {
 				Recurse = recurseSubdirectories,
@@ -77,7 +77,7 @@ namespace FSpot.Import
 				IgnoreSymlinks = true
 			};
 
-			IEnumerable<FilePhoto> result = Enumerable.Empty<FilePhoto> ();
+			var result = Enumerable.Empty<IMediaFile> ();
 
 			foreach (var importer in fileImporters) {
 				IEnumerable<SafeUri> remainingFiles;

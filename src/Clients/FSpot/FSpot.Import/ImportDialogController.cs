@@ -224,6 +224,7 @@ namespace FSpot.Import
 			}
 
 			var importer = new PhotoImporter (
+				App.Instance.Container.Resolve<IFileSystem> (),
 				App.Instance.Container.Resolve<IImageFileFactory> (),
 				merge_raw_and_jpeg);
 			var source = active_source.GetFileImportSource (
@@ -258,7 +259,7 @@ namespace FSpot.Import
 			FireEvent (ImportEvent.PhotoScanStarted);
 
 			foreach (var info in source.ScanPhotos (recurse)) {
-				ThreadAssist.ProxyToMain (() => Photos.Add (info));
+				ThreadAssist.ProxyToMain (() => Photos.Add ((IPhoto) info));
 				if (token.IsCancellationRequested)
 					break;
 			}
