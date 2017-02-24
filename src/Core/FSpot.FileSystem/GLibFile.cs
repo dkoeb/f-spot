@@ -84,6 +84,14 @@ namespace FSpot.FileSystem
 			}
 		}
 
+		public ulong GetCTime (SafeUri uri)
+		{
+			var file = FileFactory.NewForUri (uri);
+			using (var info = file.QueryInfo ("time::changed", FileQueryInfoFlags.None, null)) {
+				return info.GetAttributeULong ("time::changed");
+			}
+		}
+
 		public ulong GetMTime (SafeUri uri)
 		{
 			var file = FileFactory.NewForUri (uri);
