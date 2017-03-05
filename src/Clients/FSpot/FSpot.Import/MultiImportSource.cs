@@ -1,4 +1,4 @@
-﻿//
+//
 // MultiImportSource.cs
 //
 // Author:
@@ -42,9 +42,9 @@ namespace FSpot.Import
 			this.uris = uris;
 		}
 
-		public override IImportSource GetFileImportSource (IEnumerable<IFileImporter> fileImporters, IFileSystem fileSystem)
+		public override IImportSource GetFileImportSource (IEnumerable<IMediaFileScanner> fileScanners, IFileSystem fileSystem)
 		{
-			return new MultiFileImportSource (uris, fileImporters, fileSystem);
+			return new MultiFileImportSource (uris, fileScanners, fileSystem);
 		}
 	}
 }

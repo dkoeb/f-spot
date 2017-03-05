@@ -42,17 +42,17 @@ namespace FSpot.Import
 		#region fields
 
 		readonly SafeUri root;
-		readonly IEnumerable<IFileImporter> fileImporters;
+		readonly IEnumerable<IMediaFileScanner> fileScanners;
 		readonly IFileSystem fileSystem;
 
 		#endregion
 
 		#region ctors
 
-		public FileImportSource (SafeUri root, IEnumerable<IFileImporter> fileImporters, IFileSystem fileSystem)
+		public FileImportSource (SafeUri root, IEnumerable<IMediaFileScanner> fileScanners, IFileSystem fileSystem)
 		{
 			this.root = root;
-			this.fileImporters = fileImporters;
+			this.fileScanners = fileScanners;
 			this.fileSystem = fileSystem;
 		}
 
@@ -79,9 +79,9 @@ namespace FSpot.Import
 
 			var result = Enumerable.Empty<IMediaFile> ();
 
-			foreach (var importer in fileImporters) {
+			foreach (var scanner in fileScanners) {
 				IEnumerable<SafeUri> remainingFiles;
-				result = result.Concat (importer.Import (files, out remainingFiles));
+				result = result.Concat (scanner.Scan (files, out remainingFiles));
 				files = remainingFiles;
 			}
 

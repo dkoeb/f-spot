@@ -1,5 +1,5 @@
 ﻿//
-// ImageImporter.cs
+// PhotoScanner.cs
 //
 // Author:
 //   Daniel Köb <daniel.koeb@peony.at>
@@ -36,27 +36,27 @@ using Mono.Unix;
 
 namespace FSpot.Photos
 {
-	public class PhotoImporter : IFileImporter
+	public class PhotoScanner : IMediaFileScanner
 	{
 		readonly IFileSystem fileSystem;
 		readonly IImageFileFactory factory;
 		readonly bool mergeRawAndJpeg;
 
-		public PhotoImporter (IFileSystem fileSystem, IImageFileFactory factory, bool mergeRawAndJpeg)
+		public PhotoScanner (IFileSystem fileSystem, IImageFileFactory factory, bool mergeRawAndJpeg)
 		{
 			this.fileSystem = fileSystem;
 			this.factory = factory;
 			this.mergeRawAndJpeg = mergeRawAndJpeg;
 		}
 
-		public IEnumerable<IMediaFile> Import (IEnumerable<SafeUri> files, out IEnumerable<SafeUri> remainingFiles)
+		public IEnumerable<IMediaFile> Scan (IEnumerable<SafeUri> files, out IEnumerable<SafeUri> remainingFiles)
 		{
 			var list = new List<SafeUri> ();
 			remainingFiles = list;
-			return ImportInternal (files, list);
+			return ScanInternal (files, list);
 		}
 
-		IEnumerable<IMediaFile> ImportInternal (IEnumerable<SafeUri> files, List<SafeUri> remainingFiles)
+		IEnumerable<IMediaFile> ScanInternal (IEnumerable<SafeUri> files, List<SafeUri> remainingFiles)
 		{
 			var enumerator = files.GetEnumerator ();
 			SafeUri file = null;
