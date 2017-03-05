@@ -1,4 +1,4 @@
-﻿//
+//
 // ImportSource.cs
 //
 // Author:
@@ -67,9 +67,9 @@ namespace FSpot.Import
 
 		#region public API
 
-		public virtual IImportSource GetFileImportSource (IEnumerable<IFileImporter> fileImporters, IFileSystem fileSystem)
+		public virtual IImportSource GetFileImportSource (IEnumerable<IMediaFileScanner> fileScanners, IFileSystem fileSystem)
 		{
-			return new FileImportSource (Root, fileImporters, fileSystem);
+			return new FileImportSource (Root, fileScanners, fileSystem);
 		}
 
 		#endregion

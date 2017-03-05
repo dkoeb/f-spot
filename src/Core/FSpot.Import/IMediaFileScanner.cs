@@ -1,5 +1,5 @@
-﻿//
-// IFileImporter.cs
+//
+// IMediaFileScanner.cs
 //
 // Author:
 //   Daniel Köb <daniel.koeb@peony.at>
@@ -32,8 +32,8 @@ using Hyena;
 
 namespace FSpot.Import
 {
-	public interface IFileImporter
+	public interface IMediaFileScanner
 	{
-		IEnumerable<IMediaFile> Import (IEnumerable<SafeUri> files, out IEnumerable<SafeUri> remainingFiles);
+		IEnumerable<IMediaFile> Scan (IEnumerable<SafeUri> files, out IEnumerable<SafeUri> remainingFiles);
 	}
 }

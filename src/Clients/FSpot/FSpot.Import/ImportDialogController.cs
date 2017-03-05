@@ -216,12 +216,12 @@ namespace FSpot.Import
 				return;
 			}
 
-			var importer = new PhotoImporter (
+			var scanner = new PhotoScanner (
 				App.Instance.Container.Resolve<IFileSystem> (),
 				App.Instance.Container.Resolve<IImageFileFactory> (),
 				mergeRawAndJpeg);
 			var source = activeSource.GetFileImportSource (
-				new [] { importer },
+				new [] { scanner },
 				App.Instance.Container.Resolve<IFileSystem> ());
 			Photos.Clear ();
 
