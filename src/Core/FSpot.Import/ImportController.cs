@@ -105,7 +105,14 @@ namespace FSpot.Import
 
 					reportProgress (i++, total);
 					try {
-						ImportPhoto (db, info, createdRoll, tagsToAttach, duplicateDetect, copyFiles);
+						var destinationBase = FindImportDestination (info, Global.PhotoUri);
+						var photo = ((IMediaFile)info).Import (db, createdRoll, photo_file_tracker, metadata_importer, tagsToAttach, destinationBase, duplicateDetect, copyFiles);
+
+						if (photo != null) {
+							// Prepare thumbnail (Import is I/O bound anyway)
+							thumbnailLoader.Request (info.DefaultVersion.Uri, ThumbnailSize.Large, 10);
+							imported_photos.Add (photo.Id);
+						}
 					} catch (Exception e) {
 						Log.DebugFormat ("Failed to import {0}", info.DefaultVersion.Uri);
 						Log.DebugException (e);
@@ -125,48 +132,6 @@ namespace FSpot.Import
 		#endregion
 
 		#region private
-
-		void ImportPhoto (IDb db, IPhoto item, DbItem roll, IList<Tag> tagsToAttach, bool duplicateDetect, bool copyFiles)
-		{
-			if (item is IInvalidPhotoCheck && (item as IInvalidPhotoCheck).IsInvalid) {
-				throw new Exception ("Failed to parse metadata, probably not a photo");
-			}
-
-			// Do duplicate detection
-			if (duplicateDetect && db.Photos.HasDuplicate (item)) {
-				return;
-			}
-
-			if (copyFiles) {
-				var destinationBase = FindImportDestination (item, Global.PhotoUri);
-				fileSystem.Directory.CreateDirectory (destinationBase);
-				// Copy into photo folder.
-				photo_file_tracker.CopyIfNeeded (item, destinationBase);
-			}
-
-			// Import photo
-			var photo = db.Photos.CreateFrom (item, false, roll.Id);
-
-			bool needs_commit = false;
-
-			// Add tags
-			if (tagsToAttach.Count > 0) {
-				photo.AddTag (tagsToAttach);
-				needs_commit = true;
-			}
-
-			// Import XMP metadata
-			needs_commit |= metadata_importer.Import (photo, item);
-
-			if (needs_commit) {
-				db.Photos.Commit (photo);
-			}
-
-			// Prepare thumbnail (Import is I/O bound anyway)
-			thumbnailLoader.Request (item.DefaultVersion.Uri, ThumbnailSize.Large, 10);
-
-			imported_photos.Add (photo.Id);
-		}
 
 		void RollbackImport (IDb db)
 		{

@@ -26,9 +26,15 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+using System.Collections.Generic;
+using FSpot.Database;
+using FSpot.Import;
+using Hyena;
+
 namespace FSpot.Core
 {
 	public interface IMediaFile
 	{
+		Photo Import (IDb db, DbItem roll, PhotoFileTracker tracker, MetadataImporter metadataImporter, IList<Tag> tagsToAttach, SafeUri destinationBase, bool duplicateDetect, bool copyFiles);
 	}
 }

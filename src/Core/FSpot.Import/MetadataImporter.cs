@@ -36,7 +36,7 @@ using Mono.Unix;
 
 namespace FSpot.Import
 {
-	class MetadataImporter
+	public class MetadataImporter
 	{
 		TagStore tag_store;
 		readonly Stack<Tag> tags_created;
