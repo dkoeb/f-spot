@@ -31,8 +31,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FSpot.Core;
+using FSpot.Database;
 using FSpot.FileSystem;
 using FSpot.Imaging;
+using FSpot.Import;
 using FSpot.Utils;
 using Hyena;
 using Mono.Unix.Native;
@@ -72,6 +74,44 @@ namespace FSpot.Photos
 					return true;
 				}
 			}
+		}
+
+		public Photo Import (IDb db, DbItem roll, PhotoFileTracker tracker, MetadataImporter metadataImporter, IList<Tag> tagsToAttach, SafeUri destinationBase, bool duplicateDetect, bool copyFiles)
+		{
+			if (IsInvalid) {
+				throw new Exception ("Failed to parse metadata, probably not a photo");
+			}
+
+			// Do duplicate detection
+			if (duplicateDetect && db.Photos.HasDuplicate (this)) {
+				return null;
+			}
+
+			if (copyFiles) {
+				fileSystem.Directory.CreateDirectory (destinationBase);
+				// Copy into photo folder.
+				tracker.CopyIfNeeded (this, destinationBase);
+			}
+
+			// Import photo
+			var photo = db.Photos.CreateFrom (this, false, roll.Id);
+
+			bool needs_commit = false;
+
+			// Add tags
+			if (tagsToAttach.Count > 0) {
+				photo.AddTag (tagsToAttach);
+				needs_commit = true;
+			}
+
+			// Import XMP metadata
+			needs_commit |= metadataImporter.Import (photo, this);
+
+			if (needs_commit) {
+				db.Photos.Commit (photo);
+			}
+
+			return photo;
 		}
 
 		void EnsureMetadataParsed ()

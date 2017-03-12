@@ -49,7 +49,6 @@
     <Compile Include="Tag.cs" />
     <Compile Include="Photo.cs" />
     <Compile Include="PhotoVersion.cs" />
-    <Compile Include="IMediaFile.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FSpot.Utils\FSpot.Utils.csproj">

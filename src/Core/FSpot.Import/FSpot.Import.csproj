@@ -47,6 +47,7 @@
     <Compile Include="IImportController.cs" />
     <Compile Include="ModuleController.cs" />
     <Compile Include="IMediaFileScanner.cs" />
+    <Compile Include="IMediaFile.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

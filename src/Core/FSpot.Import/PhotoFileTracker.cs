@@ -34,7 +34,7 @@ using Hyena;
 
 namespace FSpot.Import
 {
-	class PhotoFileTracker
+	public class PhotoFileTracker
 	{
 		readonly IFileSystem file_system;
 
