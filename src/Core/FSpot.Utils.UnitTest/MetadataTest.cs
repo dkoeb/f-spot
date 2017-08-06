@@ -62,7 +62,7 @@ namespace FSpot.Utils.Tests
                 Assert.AreEqual (0, node.Children.Count);
             }
 
-            Assert.AreEqual (new string [] { "Kirche Sulzbach" }, file.ImageTag.Keywords);
+            Assert.AreEqual (new string [] { "Kirche Sulzbach" }, file.Keywords);
 
             ImageTestHelper.DeleteTempFile (uri);
         }
@@ -85,7 +85,7 @@ namespace FSpot.Utils.Tests
                 Assert.IsNull (node);
             }
 
-            Assert.AreEqual (new string [] { "F-Spot", "metadata", "test" }, file.ImageTag.Keywords);
+            Assert.AreEqual (new string [] { "F-Spot", "metadata", "test" }, file.Keywords);
 
             ImageTestHelper.DeleteTempFile (uri);
             ImageTestHelper.DeleteTempFile (sidecar_uri);
@@ -111,7 +111,7 @@ namespace FSpot.Utils.Tests
                 Assert.AreEqual (0, node.Children.Count);
             }
 
-            Assert.AreEqual (new string [] { "Kirche Sulzbach" }, file.ImageTag.Keywords);
+            Assert.AreEqual (new string [] { "Kirche Sulzbach" }, file.Keywords);
 
             ImageTestHelper.DeleteTempFile (uri);
             ImageTestHelper.DeleteTempFile (sidecar_uri);

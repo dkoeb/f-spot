@@ -88,12 +88,11 @@ namespace FSpot
 				var uri = new SafeUri (original_path);
 				using (var metadata = MetadataService.Parse (uri)) {
 					metadata.EnsureAvailableTags ();
-					var tag = metadata.ImageTag;
 					var orientation = direction == RotateDirection.Clockwise
-						? FSpot.Utils.PixbufUtils.Rotate90 (tag.Orientation)
-						: FSpot.Utils.PixbufUtils.Rotate270 (tag.Orientation);
+						? FSpot.Utils.PixbufUtils.Rotate90 (metadata.Orientation)
+						: FSpot.Utils.PixbufUtils.Rotate270 (metadata.Orientation);
 
-					tag.Orientation = orientation;
+					metadata.Orientation = orientation;
 					var always_sidecar = Preferences.Get<bool> (Preferences.METADATA_ALWAYS_USE_SIDECAR);
 					metadata.SaveSafely (uri, always_sidecar);
 					App.Instance.Container.Resolve<IThumbnailService> ().DeleteThumbnails (uri);

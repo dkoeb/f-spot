@@ -43,6 +43,10 @@
     <Compile Include="GIOTagLibFileAbstraction.cs" />
     <Compile Include="GtkUtil.cs" />
     <Compile Include="HashUtils.cs" />
+    <Compile Include="ImageMetadata.cs" />
+    <Compile Include="ImageOrientation.cs" />
+    <Compile Include="ImageOrientationExtensions.cs" />
+    <Compile Include="IMetadata.cs" />
     <Compile Include="MetadataService.cs" />
     <Compile Include="PixbufUtils.cs" />
     <Compile Include="SafeUriExtensions.cs" />

@@ -1,14 +1,10 @@
-//
-// IImageFile.cs
+﻿//
+// ImageOrientation.cs
 //
 // Author:
-//   Stephane Delcroix <stephane@delcroix.org>
-//   Ruben Vermeersch <ruben@savanne.be>
-//   Stephen Shaw <sshaw@decriptor.com>
+//   Daniel Köb <daniel.koeb@peony.at>
 //
-// Copyright (C) 2007-2010 Novell, Inc.
-// Copyright (C) 2007-2009 Stephane Delcroix
-// Copyright (C) 2010 Ruben Vermeersch
+// Copyright (C) 2017 Daniel Köb
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -30,21 +26,18 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-using FSpot.Utils;
-using Hyena;
-
-namespace FSpot.Imaging
+namespace FSpot.Utils
 {
-	public interface IImageFile : IDisposable
+	public enum ImageOrientation : uint
 	{
-		SafeUri Uri { get; }
-		ImageOrientation Orientation { get; }
-
-		Gdk.Pixbuf Load ();
-		Cms.Profile GetProfile ();
-		Gdk.Pixbuf Load (int maxWidth, int maxHeight);
-		Stream PixbufStream ();
+		None = 0,
+		TopLeft = 1,
+		TopRight = 2,
+		BottomRight = 3,
+		BottomLeft = 4,
+		LeftTop = 5,
+		RightTop = 6,
+		RightBottom = 7,
+		LeftBottom = 8
 	}
 }

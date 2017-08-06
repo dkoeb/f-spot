@@ -88,12 +88,11 @@ namespace FSpot.Database.Jobs {
             using (var metadata = MetadataService.Parse (photo.DefaultVersion.Uri)) {
                 metadata.EnsureAvailableTags ();
 
-                var tag = metadata.ImageTag;
-                tag.DateTime = photo.Time;
-                tag.Comment = photo.Description ?? string.Empty;
-                tag.Keywords = names;
-                tag.Rating = photo.Rating;
-                tag.Software = Defines.PACKAGE + " version " + Defines.VERSION;
+                metadata.DateTime = photo.Time;
+                metadata.Comment = photo.Description ?? string.Empty;
+                metadata.Keywords = names;
+                metadata.Rating = photo.Rating;
+                metadata.Software = Defines.PACKAGE + " version " + Defines.VERSION;
 
                 var always_sidecar = Preferences.Get<bool> (Preferences.METADATA_ALWAYS_USE_SIDECAR);
                 metadata.SaveSafely (photo.DefaultVersion.Uri, always_sidecar);

@@ -36,7 +36,7 @@ namespace FSpot.Utils
 {
 	public static class MetadataService
 	{
-		public static TagLib.Image.File Parse (SafeUri uri)
+		public static IMetadata Parse (SafeUri uri)
 		{
 			// Detect mime-type
 			string mime;
@@ -80,22 +80,7 @@ namespace FSpot.Utils
 				file.ParseXmpSidecar (sidecarRes);
 			}
 
-			return file;
-		}
-
-		public static void SaveSafely (this TagLib.Image.File metadata, SafeUri photoUri, bool alwaysSidecar)
-		{
-			if (alwaysSidecar || !metadata.Writeable || metadata.PossiblyCorrupt) {
-				if (!alwaysSidecar && metadata.PossiblyCorrupt) {
-					Hyena.Log.WarningFormat ($"Metadata of file {photoUri} may be corrupt, refusing to write to it, falling back to XMP sidecar.");
-				}
-
-				var sidecarRes = new GIOTagLibFileAbstraction { Uri = GetSidecarUri (photoUri) };
-
-				metadata.SaveXmpSidecar (sidecarRes);
-			} else {
-				metadata.Save ();
-			}
+			return new ImageMetadata (file);
 		}
 
 		delegate SafeUri GenerateSideCarName (SafeUri photoUri);
@@ -104,7 +89,7 @@ namespace FSpot.Utils
 			p => p.ReplaceExtension (".xmp"),
 		};
 
-		static SafeUri GetSidecarUri (SafeUri photoUri)
+		internal static SafeUri GetSidecarUri (SafeUri photoUri)
 		{
 			// First probe for existing sidecar files, use the one that's found.
 			foreach (var generator in SidecarNameGenerators) {

@@ -35,7 +35,6 @@ using Gtk;
 using Gdk;
 
 using FSpot.Utils;
-using TagLib.Image;
 
 using Hyena;
 

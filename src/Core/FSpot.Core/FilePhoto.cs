@@ -73,9 +73,9 @@ namespace FSpot.Core
 
 			using (var metadata = MetadataService.Parse (DefaultVersion.Uri)) {
 				if (metadata != null) {
-					var date = metadata.ImageTag.DateTime;
+					var date = metadata.DateTime;
 					time = date.HasValue ? date.Value : CreateDate;
-					description = metadata.ImageTag.Comment;
+					description = metadata.Comment;
 				} else {
 					throw new Exception ("Corrupt File!");
 				}

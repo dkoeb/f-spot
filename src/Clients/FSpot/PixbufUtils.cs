@@ -47,8 +47,6 @@ using FSpot.Utils;
 
 using Hyena;
 
-using TagLib.Image;
-
 using Pinta.Core;
 using Pinta.Effects;
 

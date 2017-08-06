@@ -114,14 +114,14 @@ namespace FSpot.Import
 					return true;
 
 				// Copy Rating
-				var rating = metadata.ImageTag.Rating;
+				var rating = metadata.Rating;
 				if (rating.HasValue) {
-					var rating_val = Math.Min (metadata.ImageTag.Rating.Value, 5);
+					var rating_val = Math.Min (metadata.Rating.Value, 5);
 					photo.Rating = Math.Max (0, rating_val);
 				}
 
 				// Copy Keywords
-				foreach (var keyword in metadata.ImageTag.Keywords) {
+				foreach (var keyword in metadata.Keywords) {
 					AddTagToPhoto (photo, keyword);
 				}
 

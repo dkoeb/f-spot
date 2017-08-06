@@ -34,7 +34,6 @@ using System;
 using System.IO;
 using FSpot.Utils;
 using Hyena;
-using TagLib.Image;
 
 namespace FSpot.Imaging.FileTypes
 {
@@ -56,10 +55,10 @@ namespace FSpot.Imaging.FileTypes
 			}
 		}
 
-		protected virtual void ExtractMetadata (TagLib.Image.File metadata)
+		protected virtual void ExtractMetadata (IMetadata metadata)
 		{
 			if (metadata != null)
-				Orientation = metadata.ImageTag.Orientation;
+				Orientation = metadata.Orientation;
 		}
 
 		public virtual Stream PixbufStream ()
