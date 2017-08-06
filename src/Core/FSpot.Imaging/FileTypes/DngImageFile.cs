@@ -30,6 +30,7 @@
 //
 
 using System;
+using FSpot.Utils;
 using Hyena;
 using TagLib;
 using TagLib.IFD;
@@ -134,7 +135,7 @@ namespace FSpot.Imaging.FileTypes
 		{
 		}
 
-		protected override void ExtractMetadata (TagLib.Image.File metadata)
+		protected override void ExtractMetadata (IMetadata metadata)
 		{
 			base.ExtractMetadata (metadata);
 

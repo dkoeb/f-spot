@@ -37,10 +37,8 @@ using Gdk;
 
 using FSpot.Imaging;
 using FSpot.Thumbnail;
-
+using FSpot.Utils;
 using Hyena;
-
-using TagLib.Image;
 
 namespace FSpot.Loaders
 {

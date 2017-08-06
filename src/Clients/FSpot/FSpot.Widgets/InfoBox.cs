@@ -64,7 +64,7 @@ namespace FSpot.Widgets
             public string Description;
             public Widget LabelWidget;
             public Widget InfoWidget;
-            public Action<Widget, IPhoto, TagLib.Image.File> SetSingle;
+            public Action<Widget, IPhoto, IMetadata> SetSingle;
             public Action<Widget, IPhoto[]> SetMultiple;
         }
 
@@ -72,7 +72,7 @@ namespace FSpot.Widgets
 
         void AddEntry (string id, string name, string description, Widget info_widget, float label_y_align,
                                bool default_visibility,
-                               Action<Widget, IPhoto, TagLib.Image.File> set_single,
+                               Action<Widget, IPhoto, IMetadata> set_single,
                                Action<Widget, IPhoto[]> set_multiple)
         {
             entries.Add (new InfoEntry {
@@ -89,38 +89,38 @@ namespace FSpot.Widgets
         }
 
         void AddEntry (string id, string name, string description, Widget info_widget, float label_y_align,
-                               Action<Widget, IPhoto, TagLib.Image.File> set_single,
+                               Action<Widget, IPhoto, IMetadata> set_single,
                                Action<Widget, IPhoto[]> set_multiple)
         {
             AddEntry (id, name, description, info_widget, label_y_align, true, set_single, set_multiple);
         }
 
         void AddEntry (string id, string name, string description, Widget info_widget, bool default_visibility,
-                               Action<Widget, IPhoto, TagLib.Image.File> set_single,
+                               Action<Widget, IPhoto, IMetadata> set_single,
                                Action<Widget, IPhoto[]> set_multiple)
         {
             AddEntry (id, name, description, info_widget, 0.0f, default_visibility, set_single, set_multiple);
         }
 
         void AddEntry (string id, string name, string description, Widget info_widget,
-                               Action<Widget, IPhoto, TagLib.Image.File> set_single,
+                               Action<Widget, IPhoto, IMetadata> set_single,
                                Action<Widget, IPhoto[]> set_multiple)
         {
             AddEntry (id, name, description, info_widget, 0.0f, set_single, set_multiple);
         }
 
         void AddLabelEntry (string id, string name, string description,
-                                    Func<IPhoto, TagLib.Image.File, string> single_string,
+                                    Func<IPhoto, IMetadata, string> single_string,
                                     Func<IPhoto[], string> multiple_string)
         {
             AddLabelEntry (id, name, description, true, single_string, multiple_string);
         }
 
         void AddLabelEntry (string id, string name, string description, bool default_visibility,
-                                    Func<IPhoto, TagLib.Image.File, string> single_string,
+                                    Func<IPhoto, IMetadata, string> single_string,
                                     Func<IPhoto[], string> multiple_string)
         {
-            Action<Widget, IPhoto, TagLib.Image.File> set_single = (widget, photo, metadata) => {
+            Action<Widget, IPhoto, IMetadata> set_single = (widget, photo, metadata) => {
                 if (metadata != null)
                     (widget as Label).Text = single_string (photo, metadata);
                 else
@@ -392,12 +392,8 @@ namespace FSpot.Widgets
 
             AddLabelEntry ("size", Catalog.GetString ("Size"), Catalog.GetString ("Show Size"),
                            (photo, metadata) => {
-				int width = 0;
-				int height = 0;
-				if (null != metadata.Properties) {
-   	                             width = metadata.Properties.PhotoWidth;
-   	                             height = metadata.Properties.PhotoHeight;
-				}
+				int width = metadata.Width;
+				int height = metadata.Height;
 
                                 if (width != 0 && height != 0)
                                     return string.Format ("{0}x{1}", width, height);
@@ -407,9 +403,9 @@ namespace FSpot.Widgets
 
             AddLabelEntry ("exposure", Catalog.GetString ("Exposure"), Catalog.GetString ("Show Exposure"),
                            (photo, metadata) => {
-                                var fnumber = metadata.ImageTag.FNumber;
-                                var exposure_time = metadata.ImageTag.ExposureTime;
-                                var iso_speed = metadata.ImageTag.ISOSpeedRatings;
+                                var fnumber = metadata.FNumber;
+                                var exposure_time = metadata.ExposureTime;
+                                var iso_speed = metadata.ISOSpeedRatings;
 
                                 string info = string.Empty;
 
@@ -429,16 +425,13 @@ namespace FSpot.Widgets
                                     info += string.Format ("{0}ISO {1}", Environment.NewLine, iso_speed.Value);
                                 }
 
-                                var exif = metadata.ImageTag.Exif;
-                                if (exif != null) {
-                                    var flash = exif.ExifIFD.GetLongValue (0, (ushort)TagLib.IFD.Tags.ExifEntryTag.Flash);
+                                var flash = metadata.Flash;
 
-                                    if (flash.HasValue) {
-                                        if ((flash.Value & 0x01) == 0x01)
-                                            info += string.Format (", {0}", Catalog.GetString ("flash fired"));
-                                        else
-                                            info += string.Format (", {0}", Catalog.GetString ("flash didn't fire"));
-                                    }
+                                if (flash.HasValue) {
+                                    if ((flash.Value & 0x01) == 0x01)
+                                        info += string.Format (", {0}", Catalog.GetString ("flash fired"));
+                                    else
+                                        info += string.Format (", {0}", Catalog.GetString ("flash didn't fire"));
                                 }
 
                                 if (info == string.Empty)
@@ -449,7 +442,7 @@ namespace FSpot.Widgets
             
             AddLabelEntry ("focal_length", Catalog.GetString ("Focal Length"), Catalog.GetString ("Show Focal Length"),
                            false, (photo, metadata) => {
-                                var focal_length = metadata.ImageTag.FocalLength;
+                                var focal_length = metadata.FocalLength;
                 
                                 if (focal_length == null)
                                     return Catalog.GetString ("(Unknown)");
@@ -458,11 +451,11 @@ namespace FSpot.Widgets
                             }, null);
 
             AddLabelEntry ("camera", Catalog.GetString ("Camera"), Catalog.GetString ("Show Camera"), false,
-                           (photo, metadata) => { return metadata.ImageTag.Model ?? Catalog.GetString ("(Unknown)"); },
+                           (photo, metadata) => { return metadata.Model ?? Catalog.GetString ("(Unknown)"); },
                            null);
             
             AddLabelEntry ("creator", Catalog.GetString ("Creator"), Catalog.GetString ("Show Creator"),
-                           (photo, metadata) => { return metadata.ImageTag.Creator ?? Catalog.GetString ("(Unknown)"); },
+                           (photo, metadata) => { return metadata.Creator ?? Catalog.GetString ("(Unknown)"); },
                            null);
 
             AddLabelEntry ("file_size", Catalog.GetString ("File Size"), Catalog.GetString ("Show File Size"), false,

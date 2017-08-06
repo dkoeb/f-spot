@@ -36,12 +36,10 @@ using System;
 using FSpot.Core;
 using FSpot.Loaders;
 using FSpot.Settings;
-
+using FSpot.Utils;
 using Hyena;
 
 using Gdk;
-
-using TagLib.Image;
 
 namespace FSpot.Widgets
 {

@@ -278,7 +278,7 @@ namespace FSpot.Utils
 					metadata_to.CopyFrom (metadata_from);
 
 					// Reset orientation to make sure images appear upright.
-					metadata_to.ImageTag.Orientation = ImageOrientation.TopLeft;
+					metadata_to.Orientation = ImageOrientation.TopLeft;
 					metadata_to.Save ();
 				}
 			}

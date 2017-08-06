@@ -28,12 +28,9 @@
 //
 
 using System;
-
+using FSpot.Utils;
 using Gdk;
-
 using Hyena;
-
-using TagLib.Image;
 
 namespace FSpot.Loaders
 {
