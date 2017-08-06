@@ -71,7 +71,7 @@ namespace FSpot.Core
 			if (metadata_parsed)
 				return;
 
-			using (var metadata = Metadata.Parse (DefaultVersion.Uri)) {
+			using (var metadata = MetadataService.Parse (DefaultVersion.Uri)) {
 				if (metadata != null) {
 					var date = metadata.ImageTag.DateTime;
 					time = date.HasValue ? date.Value : CreateDate;

@@ -51,7 +51,7 @@ namespace FSpot.Imaging.FileTypes
 			Uri = uri;
 			Orientation = ImageOrientation.TopLeft;
 
-			using (var metadata_file = Metadata.Parse (uri)) {
+			using (var metadata_file = MetadataService.Parse (uri)) {
 				ExtractMetadata (metadata_file);
 			}
 		}

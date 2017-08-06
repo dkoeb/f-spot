@@ -43,7 +43,7 @@
     <Compile Include="GIOTagLibFileAbstraction.cs" />
     <Compile Include="GtkUtil.cs" />
     <Compile Include="HashUtils.cs" />
-    <Compile Include="Metadata.cs" />
+    <Compile Include="MetadataService.cs" />
     <Compile Include="PixbufUtils.cs" />
     <Compile Include="SafeUriExtensions.cs" />
     <Compile Include="SidecarXmpExtensions.cs" />

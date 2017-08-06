@@ -48,7 +48,7 @@ namespace FSpot.Utils.Tests
             // Tests the file in its original state
             var uri = ImageTestHelper.CreateTempFile ("taglib-sample.jpg");
 
-            var file = Metadata.Parse (uri);
+            var file = MetadataService.Parse (uri);
             Assert.IsNotNull (file);
 
             XmpTag xmp = file.GetTag (TagTypes.XMP) as XmpTag;
@@ -74,7 +74,7 @@ namespace FSpot.Utils.Tests
             var uri = ImageTestHelper.CreateTempFile ("taglib-sample.jpg");
             var sidecar_uri = ImageTestHelper.CopySidecarToTest (uri, "taglib-sample.xmp");
 
-            var file = Metadata.Parse (uri);
+            var file = MetadataService.Parse (uri);
             Assert.IsNotNull (file);
 
             XmpTag xmp = file.GetTag (TagTypes.XMP) as XmpTag;
@@ -98,7 +98,7 @@ namespace FSpot.Utils.Tests
             var uri = ImageTestHelper.CreateTempFile ("taglib-sample.jpg");
             var sidecar_uri = ImageTestHelper.CopySidecarToTest (uri, "taglib-sample-broken.xmp");
 
-            var file = Metadata.Parse (uri);
+            var file = MetadataService.Parse (uri);
             Assert.IsNotNull (file);
 
             XmpTag xmp = file.GetTag (TagTypes.XMP) as XmpTag;
@@ -124,7 +124,7 @@ namespace FSpot.Utils.Tests
             var uri = ImageTestHelper.CreateTempFile ("taglib-sample-broken.jpg");
             var sidecar_uri = ImageTestHelper.CopySidecarToTest (uri, "taglib-sample-broken.xmp");
 
-            var file = Metadata.Parse (uri);
+            var file = MetadataService.Parse (uri);
             Assert.IsNull (file);
 
             ImageTestHelper.DeleteTempFile (uri);
