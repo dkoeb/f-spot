@@ -1,5 +1,5 @@
 //
-// Metadata.cs
+// MetadataService.cs
 //
 // Author:
 //   Ruben Vermeersch <ruben@savanne.be>
@@ -34,7 +34,7 @@ using TagLib;
 
 namespace FSpot.Utils
 {
-	public static class Metadata
+	public static class MetadataService
 	{
 		public static TagLib.Image.File Parse (SafeUri uri)
 		{

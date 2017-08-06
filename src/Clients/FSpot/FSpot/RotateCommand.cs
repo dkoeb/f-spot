@@ -86,7 +86,7 @@ namespace FSpot
 		{
 			try {
 				var uri = new SafeUri (original_path);
-				using (var metadata = Metadata.Parse (uri)) {
+				using (var metadata = MetadataService.Parse (uri)) {
 					metadata.EnsureAvailableTags ();
 					var tag = metadata.ImageTag;
 					var orientation = direction == RotateDirection.Clockwise

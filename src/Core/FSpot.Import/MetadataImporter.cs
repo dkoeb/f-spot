@@ -109,7 +109,7 @@ namespace FSpot.Import
 
 		public bool Import (Photo photo, IPhoto importingFrom)
 		{
-			using (var metadata = Metadata.Parse (importingFrom.DefaultVersion.Uri)) {
+			using (var metadata = MetadataService.Parse (importingFrom.DefaultVersion.Uri)) {
 				if (metadata == null)
 					return true;
 

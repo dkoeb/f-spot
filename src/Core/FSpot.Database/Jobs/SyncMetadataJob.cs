@@ -85,7 +85,7 @@ namespace FSpot.Database.Jobs {
             for (int i = 0; i < tags.Length; i++)
                 names [i] = tags [i].Name;
 
-            using (var metadata = Metadata.Parse (photo.DefaultVersion.Uri)) {
+            using (var metadata = MetadataService.Parse (photo.DefaultVersion.Uri)) {
                 metadata.EnsureAvailableTags ();
 
                 var tag = metadata.ImageTag;
