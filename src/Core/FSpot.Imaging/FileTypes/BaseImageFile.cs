@@ -42,6 +42,7 @@ namespace FSpot.Imaging.FileTypes
 		#region fields
 
 		bool disposed;
+		IMetadata metadata;
 
 		#endregion
 
@@ -49,7 +50,9 @@ namespace FSpot.Imaging.FileTypes
 
 		public SafeUri Uri { get; }
 
-		public ImageOrientation Orientation { get; private set; }
+		public ImageOrientation Orientation => Metadata?.Orientation ?? ImageOrientation.TopLeft;
+
+		public IMetadata Metadata => metadata ?? (metadata = MetadataService.Parse (Uri));
 
 		#endregion
 
@@ -58,11 +61,6 @@ namespace FSpot.Imaging.FileTypes
 		public BaseImageFile (SafeUri uri)
 		{
 			Uri = uri;
-			Orientation = ImageOrientation.TopLeft;
-
-			using (var metadataFile = MetadataService.Parse (uri)) {
-				ExtractMetadata (metadataFile);
-			}
 		}
 
 		#endregion
@@ -99,12 +97,6 @@ namespace FSpot.Imaging.FileTypes
 		#endregion
 
 		#region protected API
-
-		protected virtual void ExtractMetadata (IMetadata metadata)
-		{
-			if (metadata != null)
-				Orientation = metadata.Orientation;
-		}
 
 		protected virtual void Close ()
 		{

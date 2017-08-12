@@ -30,7 +30,6 @@
 //
 
 using System;
-using FSpot.Utils;
 using Hyena;
 using TagLib;
 using TagLib.IFD;
@@ -41,33 +40,33 @@ namespace FSpot.Imaging.FileTypes
 {
 	class Cr2ImageFile : BaseImageFile
 	{
-		uint offset;
+		uint? offset;
+		uint Offset => offset ?? (offset = ExtractOffset ()).Value;
 
 		public Cr2ImageFile (SafeUri uri) : base (uri)
 		{
 		}
 
-		protected override void ExtractMetadata (IMetadata metadata)
+		uint ExtractOffset ()
 		{
-			base.ExtractMetadata (metadata);
-
-			if (metadata == null)
-				return;
+			if (Metadata == null)
+				return 0;
 
 			try {
-				var tag = metadata.GetTag (TagTypes.TiffIFD) as IFDTag;
+				var tag = Metadata.GetTag (TagTypes.TiffIFD) as IFDTag;
 				var structure = tag.Structure;
 				var entry = structure.GetEntry (0, (ushort)IFDEntryTag.StripOffsets);
-				offset = (entry as StripOffsetsIFDEntry).Values [0];
+				return (entry as StripOffsetsIFDEntry).Values [0];
 			} catch (Exception e) {
 				Log.DebugException (e);
 			}
+			return 0;
 		}
 
 		public override System.IO.Stream PixbufStream ()
 		{
 			System.IO.Stream file = base.PixbufStream ();
-			file.Position = offset;
+			file.Position = Offset;
 			return file;
 		}
 	}

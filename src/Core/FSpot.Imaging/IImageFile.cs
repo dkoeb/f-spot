@@ -43,6 +43,7 @@ namespace FSpot.Imaging
 	{
 		SafeUri Uri { get; }
 		ImageOrientation Orientation { get; }
+		IMetadata Metadata { get; }
 
 		Pixbuf Load ();
 		Pixbuf Load (int maxWidth, int maxHeight);
