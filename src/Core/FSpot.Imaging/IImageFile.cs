@@ -32,7 +32,9 @@
 
 using System;
 using System.IO;
+using FSpot.Cms;
 using FSpot.Utils;
+using Gdk;
 using Hyena;
 
 namespace FSpot.Imaging
@@ -42,9 +44,9 @@ namespace FSpot.Imaging
 		SafeUri Uri { get; }
 		ImageOrientation Orientation { get; }
 
-		Gdk.Pixbuf Load ();
-		Cms.Profile GetProfile ();
-		Gdk.Pixbuf Load (int maxWidth, int maxHeight);
+		Pixbuf Load ();
+		Pixbuf Load (int maxWidth, int maxHeight);
+		Profile GetProfile ();
 		Stream PixbufStream ();
 	}
 }

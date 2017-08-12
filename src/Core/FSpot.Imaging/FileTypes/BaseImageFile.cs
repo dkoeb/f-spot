@@ -30,35 +30,64 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System;
 using System.IO;
-using FSpot.Utils;
+using FSpot.Cms;
+using Gdk;
 using Hyena;
 
 namespace FSpot.Imaging.FileTypes
 {
 	class BaseImageFile : IImageFile
 	{
+		#region fields
+
 		bool disposed;
 
-		public SafeUri Uri { get; private set; }
+		#endregion
+
+		#region props
+
+		public SafeUri Uri { get; }
 
 		public ImageOrientation Orientation { get; private set; }
+
+		#endregion
+
+		#region ctors
 
 		public BaseImageFile (SafeUri uri)
 		{
 			Uri = uri;
 			Orientation = ImageOrientation.TopLeft;
 
-			using (var metadata_file = MetadataService.Parse (uri)) {
-				ExtractMetadata (metadata_file);
+			using (var metadataFile = MetadataService.Parse (uri)) {
+				ExtractMetadata (metadataFile);
 			}
 		}
 
-		protected virtual void ExtractMetadata (IMetadata metadata)
+		#endregion
+
+		#region public API
+
+		public Pixbuf Load ()
 		{
-			if (metadata != null)
-				Orientation = metadata.Orientation;
+			using (Stream stream = PixbufStream ()) {
+				var orig = new Pixbuf (stream);
+				return TransformAndDispose (orig);
+			}
+		}
+
+		public Pixbuf Load (int maxWidth, int maxHeight)
+		{
+			using (var full = Load ()) {
+				return full.ScaleToMaxSize (maxWidth, maxHeight);
+			}
+		}
+
+		// FIXME this need to have an intent just like the loading stuff.
+		public virtual Profile GetProfile ()
+		{
+			return null;
 		}
 
 		public virtual Stream PixbufStream ()
@@ -67,43 +96,44 @@ namespace FSpot.Imaging.FileTypes
 			return new GLib.GioStream (GLib.FileFactory.NewForUri (Uri).Read (null));
 		}
 
-		protected Gdk.Pixbuf TransformAndDispose (Gdk.Pixbuf orig)
+		#endregion
+
+		#region protected API
+
+		protected virtual void ExtractMetadata (IMetadata metadata)
+		{
+			if (metadata != null)
+				Orientation = metadata.Orientation;
+		}
+
+		protected virtual void Close ()
+		{
+		}
+
+		#endregion
+
+		#region private
+
+		Pixbuf TransformAndDispose (Pixbuf orig)
 		{
 			if (orig == null)
 				return null;
 
-			Gdk.Pixbuf rotated = orig.TransformOrientation (Orientation);
+			Pixbuf rotated = orig.TransformOrientation (Orientation);
 
 			orig.Dispose ();
 
 			return rotated;
 		}
 
-		public Gdk.Pixbuf Load ()
-		{
-			using (Stream stream = PixbufStream ()) {
-				var orig = new Gdk.Pixbuf (stream);
-				return TransformAndDispose (orig);
-			}
-		}
+		#endregion
 
-		public Gdk.Pixbuf Load (int maxWidth, int maxHeight)
-		{
-			using (var full = Load ()) {
-				return full.ScaleToMaxSize (maxWidth, maxHeight);
-			}
-		}
-
-		// FIXME this need to have an intent just like the loading stuff.
-		public virtual Cms.Profile GetProfile ()
-		{
-			return null;
-		}
+		#region IDisposable
 
 		public void Dispose ()
 		{
 			Dispose (true);
-			GC.SuppressFinalize (this);
+			System.GC.SuppressFinalize (this);
 		}
 
 		protected virtual void Dispose (bool disposing)
@@ -116,8 +146,6 @@ namespace FSpot.Imaging.FileTypes
 				Close ();
 		}
 
-		protected virtual void Close ()
-		{
-		}
+		#endregion
 	}
 }
