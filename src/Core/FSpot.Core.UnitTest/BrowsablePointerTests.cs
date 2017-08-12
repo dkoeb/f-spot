@@ -35,9 +35,9 @@ namespace FSpot.Core.UnitTest
     [TestFixture]
     public class BrowsablePointerTests
     {
-        IPhoto photo1 = new FilePhoto(new SafeUri("/1"));
-        IPhoto photo2 = new FilePhoto(new SafeUri("/2"));
-        IPhoto photo3 = new FilePhoto(new SafeUri("/3"));
+        readonly IPhoto photo1 = new FilePhoto(new SafeUri("/1"), null);
+        readonly IPhoto photo2 = new FilePhoto(new SafeUri("/2"), null);
+        readonly IPhoto photo3 = new FilePhoto(new SafeUri("/3"), null);
 
         [Test]
         public void BrowsablePointer_IndexIsNullForEmptyCollection ()

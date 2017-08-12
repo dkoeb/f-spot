@@ -501,7 +501,8 @@ namespace FSpot.Widgets
                 histogram_expander.Visible = true;
                 UpdateHistogram();
 
-                using (var metadata = MetadataService.Parse (photo.DefaultVersion.Uri)) {
+                using (var image = App.Instance.Container.Resolve<IImageFileFactory> ().Create (photo.DefaultVersion.Uri)) {
+                    var metadata = image.Metadata;
                     foreach (var entry in entries) {
                         bool is_single = (entry.SetSingle != null);
                         

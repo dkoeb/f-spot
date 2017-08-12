@@ -41,16 +41,19 @@ namespace FSpot.Core
 	{
 		bool metadata_parsed;
 
+		readonly IImageFileFactory imageFileFactory;
 		readonly List<IPhotoVersion> versions;
 
-		public FilePhoto (SafeUri uri) : this (uri, null)
+		public FilePhoto (SafeUri uri, IImageFileFactory imageFileFactory) : this (uri, null, imageFileFactory)
 		{
 		}
 
-		public FilePhoto (SafeUri uri, string name)
+		public FilePhoto (SafeUri uri, string name, IImageFileFactory imageFileFactory)
 		{
 			versions = new List<IPhotoVersion> ();
 			versions.Add (new FilePhotoVersion { Uri = uri, Name = name });
+
+			this.imageFileFactory = imageFileFactory;
 		}
 
 		public bool IsInvalid {
@@ -72,7 +75,8 @@ namespace FSpot.Core
 			if (metadata_parsed)
 				return;
 
-			using (var metadata = MetadataService.Parse (DefaultVersion.Uri)) {
+			using (var image = imageFileFactory.Create (DefaultVersion.Uri)) {
+				var metadata = image.Metadata;
 				if (metadata != null) {
 					var date = metadata.DateTime;
 					time = date.HasValue ? date.Value : CreateDate;

@@ -109,9 +109,9 @@ namespace FSpot.Import
 
 				FilePhoto info;
 				if (version == null) {
-					info  = new FilePhoto (original, Catalog.GetString ("Original"));
+					info  = new FilePhoto (original, Catalog.GetString ("Original"), factory);
 				} else {
-					info  = new FilePhoto (original, Catalog.GetString ("Original RAW"));
+					info  = new FilePhoto (original, Catalog.GetString ("Original RAW"), factory);
 					info.AddVersion (version, Catalog.GetString ("Original JPEG"));
 				}
 

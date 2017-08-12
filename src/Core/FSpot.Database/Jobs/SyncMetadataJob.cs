@@ -32,7 +32,6 @@
 using System;
 using Banshee.Kernel;
 using FSpot.Core;
-using FSpot.Database;
 using FSpot.Imaging;
 using FSpot.Settings;
 using FSpot.Utils;
@@ -78,7 +77,7 @@ namespace FSpot.Database.Jobs
 			return false;
 		}
 
-		static void WriteMetadataToImage (IPhoto photo)
+		void WriteMetadataToImage (IPhoto photo)
 		{
 			Tag [] tags = photo.Tags;
 			var names = new string [tags.Length];
@@ -86,7 +85,8 @@ namespace FSpot.Database.Jobs
 			for (int i = 0; i < tags.Length; i++)
 				names [i] = tags [i].Name;
 
-			using (var metadata = MetadataService.Parse (photo.DefaultVersion.Uri)) {
+			using (var image = Container.Resolve<IImageFileFactory> ().Create (photo.DefaultVersion.Uri)) {
+				var metadata = image.Metadata;
 				metadata.EnsureAvailableTags ();
 
 				metadata.DateTime = photo.Time;
