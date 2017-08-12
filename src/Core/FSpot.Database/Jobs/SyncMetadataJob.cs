@@ -36,9 +36,8 @@ using Banshee.Kernel;
 using Hyena;
 
 using FSpot.Core;
-using FSpot.Database;
+using FSpot.Imaging;
 using FSpot.Settings;
-using FSpot.Utils;
 
 namespace FSpot.Database.Jobs {
     public class SyncMetadataJob : Job

@@ -28,11 +28,12 @@
 //
 
 using System;
+using FSpot.Utils;
 using GLib;
 using Hyena;
 using TagLib;
 
-namespace FSpot.Utils
+namespace FSpot.Imaging
 {
 	public static class MetadataService
 	{

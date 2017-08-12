@@ -30,7 +30,7 @@
 //
 
 using System;
-using FSpot.Utils;
+using FSpot.Imaging;
 
 namespace FSpot
 {

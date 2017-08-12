@@ -31,7 +31,7 @@ using System;
 using System.Collections.Generic;
 using FSpot.Core;
 using FSpot.Database;
-using FSpot.Utils;
+using FSpot.Imaging;
 using Mono.Unix;
 
 namespace FSpot.Import

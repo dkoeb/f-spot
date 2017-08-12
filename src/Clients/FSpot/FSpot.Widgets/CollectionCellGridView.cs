@@ -33,8 +33,8 @@ using Gtk;
 using Gdk;
 
 using FSpot.Core;
+using FSpot.Imaging;
 using FSpot.Settings;
-using FSpot.Utils;
 
 
 namespace FSpot.Widgets

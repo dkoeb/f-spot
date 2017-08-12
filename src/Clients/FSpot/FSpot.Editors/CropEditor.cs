@@ -201,7 +201,7 @@ namespace FSpot.Editors
 
 		protected override Pixbuf Process (Pixbuf input, Cms.Profile input_profile)
 		{
-			Rectangle selection = FSpot.Utils.PixbufUtils.TransformOrientation ((int)State.PhotoImageView.PixbufOrientation <= 4 ? input.Width : input.Height,
+			Rectangle selection = Imaging.PixbufUtils.TransformOrientation ((int)State.PhotoImageView.PixbufOrientation <= 4 ? input.Width : input.Height,
 											    (int)State.PhotoImageView.PixbufOrientation <= 4 ? input.Height : input.Width,
 											    State.Selection, State.PhotoImageView.PixbufOrientation);
 			Pixbuf edited = new Pixbuf (input.Colorspace,

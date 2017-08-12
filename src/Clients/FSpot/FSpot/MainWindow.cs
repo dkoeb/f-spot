@@ -48,6 +48,7 @@ using FSpot.Core;
 using FSpot.Database;
 using FSpot.Database.Jobs;
 using FSpot.Extensions;
+using FSpot.Imaging;
 using FSpot.Query;
 using FSpot.Widgets;
 using FSpot.Utils;

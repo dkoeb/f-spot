@@ -34,9 +34,9 @@
 using System;
 
 using FSpot.Core;
+using FSpot.Imaging;
 using FSpot.Loaders;
 using FSpot.Settings;
-using FSpot.Utils;
 using Hyena;
 
 using Gdk;

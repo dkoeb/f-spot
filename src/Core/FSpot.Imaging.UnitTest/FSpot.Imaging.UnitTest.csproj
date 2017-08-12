@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -41,6 +41,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <Compile Include="MetadataTest.cs" />
     <Compile Include="TestOf_ImageFile.cs" />
     <Compile Include="ImageFileTests.cs" />
   </ItemGroup>
@@ -60,6 +61,14 @@
     <ProjectReference Include="..\FSpot.FileSystem\FSpot.FileSystem.csproj">
       <Project>{F7821E0B-6861-47D7-9FCE-F853CDF2F838}</Project>
       <Name>FSpot.FileSystem</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FSpot.Utils.UnitTest\FSpot.Utils.UnitTest.csproj">
+      <Project>{5341c44c-b576-4024-a5ab-045b26f38bdf}</Project>
+      <Name>FSpot.Utils.UnitTest</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FSpot.Utils\FSpot.Utils.csproj">
+      <Project>{ce160879-1bf0-4711-a18f-fda2772900fa}</Project>
+      <Name>FSpot.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

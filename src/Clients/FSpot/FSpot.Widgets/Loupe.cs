@@ -187,7 +187,7 @@ namespace FSpot.Widgets
 						 region.X, region.Y,
 						 region.Width, region.Height);
 			using (tmp)
-				source = FSpot.Utils.PixbufUtils.TransformOrientation (tmp, view.PixbufOrientation);
+				source = Imaging.PixbufUtils.TransformOrientation (tmp, view.PixbufOrientation);
 
 			//FIXME sometimes that ctor returns results with a null
 			//handle this case ourselves

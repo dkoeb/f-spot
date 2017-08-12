@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -43,12 +43,6 @@
     <Compile Include="GIOTagLibFileAbstraction.cs" />
     <Compile Include="GtkUtil.cs" />
     <Compile Include="HashUtils.cs" />
-    <Compile Include="ImageMetadata.cs" />
-    <Compile Include="ImageOrientation.cs" />
-    <Compile Include="ImageOrientationExtensions.cs" />
-    <Compile Include="IMetadata.cs" />
-    <Compile Include="MetadataService.cs" />
-    <Compile Include="PixbufUtils.cs" />
     <Compile Include="SafeUriExtensions.cs" />
     <Compile Include="SidecarXmpExtensions.cs" />
     <Compile Include="TargetListExtensionMethods.cs" />
