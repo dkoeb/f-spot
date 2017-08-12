@@ -28,7 +28,7 @@
 //
 
 using System;
-using FSpot.Utils;
+using FSpot.Imaging;
 using Gdk;
 using Hyena;
 

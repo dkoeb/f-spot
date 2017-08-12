@@ -27,11 +27,12 @@
 //
 
 using System;
+using FSpot.Utils;
 using Hyena;
 using TagLib;
 using File = TagLib.Image.File;
 
-namespace FSpot.Utils
+namespace FSpot.Imaging
 {
 	class ImageMetadata : IMetadata
 	{

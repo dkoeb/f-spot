@@ -131,7 +131,7 @@ namespace FSpot.Widgets
 
 			string orig_path = item.DefaultVersion.Uri.LocalPath;
 
-			Pixbuf pixbuf = FSpot.Utils.PixbufUtils.ShallowCopy (preview_cache.Get (orig_path + show_histogram));
+			Pixbuf pixbuf = Imaging.PixbufUtils.ShallowCopy (preview_cache.Get (orig_path + show_histogram));
 			if (pixbuf == null) {
 				// A bizarre pixbuf = hack to try to deal with cinematic displays, etc.
 				int preview_size = ((Screen.Width + Screen.Height)/2)/3;

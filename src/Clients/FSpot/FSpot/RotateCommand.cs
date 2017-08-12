@@ -37,10 +37,10 @@ using System.IO;
 using Gtk;
 
 using FSpot.Core;
+using FSpot.Imaging;
 using FSpot.Settings;
 using FSpot.Thumbnail;
 using FSpot.UI.Dialog;
-using FSpot.Utils;
 
 using Hyena;
 using Hyena.Widgets;
@@ -89,8 +89,8 @@ namespace FSpot
 				using (var metadata = MetadataService.Parse (uri)) {
 					metadata.EnsureAvailableTags ();
 					var orientation = direction == RotateDirection.Clockwise
-						? FSpot.Utils.PixbufUtils.Rotate90 (metadata.Orientation)
-						: FSpot.Utils.PixbufUtils.Rotate270 (metadata.Orientation);
+						? Imaging.PixbufUtils.Rotate90 (metadata.Orientation)
+						: Imaging.PixbufUtils.Rotate270 (metadata.Orientation);
 
 					metadata.Orientation = orientation;
 					var always_sidecar = Preferences.Get<bool> (Preferences.METADATA_ALWAYS_USE_SIDECAR);

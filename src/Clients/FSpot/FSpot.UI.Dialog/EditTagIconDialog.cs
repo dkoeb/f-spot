@@ -216,12 +216,12 @@ namespace FSpot.UI.Dialog
 			if (image_view.Pixbuf != null) {
 				if (image_view.Selection != Gdk.Rectangle.Zero) {
 					using (var tmp = new Gdk.Pixbuf (image_view.Pixbuf, x, y, width, height)) {
-						Gdk.Pixbuf transformed = FSpot.Utils.PixbufUtils.TransformOrientation (tmp, image_view.PixbufOrientation);
+						Gdk.Pixbuf transformed = Imaging.PixbufUtils.TransformOrientation (tmp, image_view.PixbufOrientation);
 						PreviewPixbuf = PixbufUtils.TagIconFromPixbuf (transformed);
 						transformed.Dispose ();
 					}
 				} else {
-					Gdk.Pixbuf transformed = FSpot.Utils.PixbufUtils.TransformOrientation (image_view.Pixbuf, image_view.PixbufOrientation);
+					Gdk.Pixbuf transformed = Imaging.PixbufUtils.TransformOrientation (image_view.Pixbuf, image_view.PixbufOrientation);
 					PreviewPixbuf = PixbufUtils.TagIconFromPixbuf (transformed);
 					transformed.Dispose ();
 				}

@@ -30,6 +30,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FSpot.Imaging;
 using FSpot.Utils;
 using Hyena;
 using Mono.Unix.Native;

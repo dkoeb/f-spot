@@ -27,12 +27,12 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using Hyena;
+using FSpot.Utils.Tests;
 using NUnit.Framework;
 using TagLib;
 using TagLib.Xmp;
 
-namespace FSpot.Utils.Tests
+namespace FSpot.Imaging.UnitTest
 {
     [TestFixture]
     public class MetadataTest

@@ -40,6 +40,7 @@ using Mono.Unix;
 
 using FSpot.Core;
 using FSpot.Database;
+using FSpot.Imaging;
 using FSpot.Settings;
 using FSpot.Utils;
 using FSpot.Widgets;

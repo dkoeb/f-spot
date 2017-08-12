@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -79,6 +79,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FSpot.Imaging\FSpot.Imaging.csproj">
+      <Project>{69C1F628-6CB4-4446-96AC-57810DD57594}</Project>
+      <Name>FSpot.Imaging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FSpot.Utils\FSpot.Utils.csproj">
       <Project>{CE160879-1BF0-4711-A18F-FDA2772900FA}</Project>
       <Name>FSpot.Utils</Name>

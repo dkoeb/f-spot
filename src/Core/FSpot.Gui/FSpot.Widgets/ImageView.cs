@@ -30,12 +30,9 @@
 //
 
 using System;
-
+using FSpot.Imaging;
 using Gtk;
 using Gdk;
-
-using FSpot.Utils;
-
 using Hyena;
 
 namespace FSpot.Widgets

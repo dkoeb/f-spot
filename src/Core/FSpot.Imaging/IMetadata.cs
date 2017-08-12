@@ -30,7 +30,7 @@ using System;
 using Hyena;
 using TagLib;
 
-namespace FSpot.Utils
+namespace FSpot.Imaging
 {
 	public interface IMetadata : IDisposable
 	{

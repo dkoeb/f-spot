@@ -26,7 +26,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-namespace FSpot.Utils
+namespace FSpot.Imaging
 {
 	public enum ImageOrientation : uint
 	{

@@ -150,7 +150,7 @@ public static class PixbufUtils
 
 			loader.Close ();
 			Pixbuf orig = loader.Pixbuf;
-			Gdk.Pixbuf rotated = FSpot.Utils.PixbufUtils.TransformOrientation (orig, orientation);
+			Gdk.Pixbuf rotated = FSpot.Imaging.PixbufUtils.TransformOrientation (orig, orientation);
 
 			if (orig != rotated)
 				orig.Dispose ();

@@ -33,10 +33,7 @@ using System;
 using System.Runtime.InteropServices;
 using Gdk;
 
-using Hyena;
-using TagLib.Image;
-
-namespace FSpot.Utils
+namespace FSpot.Imaging
 {
 	public static class PixbufUtils
 	{
@@ -60,7 +57,7 @@ namespace FSpot.Utils
 	            orientation = rot [((int)orientation) -1];
 	            return orientation;
 	        }
-	
+
 		public static ImageOrientation Rotate90 (ImageOrientation orientation)
 		{
 			orientation = Rotate270 (orientation);
@@ -73,11 +70,11 @@ namespace FSpot.Utils
 		{
 			return TransformOrientation (src.Width, src.Height, args, orientation);
 		}
-		
+
 		public static Rectangle TransformOrientation (int total_width, int total_height, Rectangle args, ImageOrientation orientation)
 		{
 			Rectangle area = args;
-			
+
 			switch (orientation) {
 			case ImageOrientation.BottomRight:
 				area.X = total_width - args.X - args.Width;
@@ -116,7 +113,7 @@ namespace FSpot.Utils
 			default:
 				break;
 			}
-			
+
 			return area;
 		}
 
