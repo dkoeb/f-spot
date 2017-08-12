@@ -35,7 +35,7 @@ using TagLib;
 
 namespace FSpot.Imaging
 {
-	public static class MetadataService
+	static class MetadataService
 	{
 		public static IMetadata Parse (SafeUri uri)
 		{

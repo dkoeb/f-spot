@@ -86,7 +86,8 @@ namespace FSpot
 		{
 			try {
 				var uri = new SafeUri (original_path);
-				using (var metadata = MetadataService.Parse (uri)) {
+				using (var image = App.Instance.Container.Resolve<IImageFileFactory>().Create (uri)) {
+					var metadata = image.Metadata;
 					metadata.EnsureAvailableTags ();
 					var orientation = direction == RotateDirection.Clockwise
 						? Imaging.PixbufUtils.Rotate90 (metadata.Orientation)

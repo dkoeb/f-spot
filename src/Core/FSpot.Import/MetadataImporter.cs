@@ -40,6 +40,7 @@ namespace FSpot.Import
 	{
 		TagStore tag_store;
 		readonly Stack<Tag> tags_created;
+		readonly IImageFileFactory imageFileFactory;
 
 		const string LastImportIcon = "gtk-new";
 
@@ -67,12 +68,14 @@ namespace FSpot.Import
 
 		TagInfo li_root_tag; // This is the Last Import root tag
 
-		public MetadataImporter (TagStore tagStore)
+		public MetadataImporter (TagStore tagStore, IImageFileFactory imageFileFactory)
 		{
 			tag_store = tagStore;
 			tags_created = new Stack<Tag> ();
 
 			li_root_tag = new TagInfo (Catalog.GetString ("Imported Tags"), LastImportIcon);
+
+			this.imageFileFactory = imageFileFactory;
 		}
 
 		Tag EnsureTag (TagInfo info, Category parent)
@@ -109,7 +112,8 @@ namespace FSpot.Import
 
 		public bool Import (Photo photo, IPhoto importingFrom)
 		{
-			using (var metadata = MetadataService.Parse (importingFrom.DefaultVersion.Uri)) {
+			using (var image = imageFileFactory.Create (importingFrom.DefaultVersion.Uri)) {
+				var metadata = image.Metadata;
 				if (metadata == null)
 					return true;
 

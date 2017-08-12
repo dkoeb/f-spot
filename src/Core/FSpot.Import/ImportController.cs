@@ -36,6 +36,7 @@ using System.Threading;
 using FSpot.Core;
 using FSpot.Database;
 using FSpot.FileSystem;
+using FSpot.Imaging;
 using FSpot.Settings;
 using FSpot.Thumbnail;
 using FSpot.Utils;
@@ -49,6 +50,7 @@ namespace FSpot.Import
 
 		readonly IFileSystem fileSystem;
 		readonly IThumbnailLoader thumbnailLoader;
+		readonly IImageFileFactory imageFileFactory;
 
 		PhotoFileTracker photo_file_tracker;
 		MetadataImporter metadata_importer;
@@ -68,10 +70,11 @@ namespace FSpot.Import
 
 		#region ctors
 
-		public ImportController (IFileSystem fileSystem, IThumbnailLoader thumbnailLoader)
+		public ImportController (IFileSystem fileSystem, IThumbnailLoader thumbnailLoader, IImageFileFactory imageFileFactory)
 		{
 			this.fileSystem = fileSystem;
 			this.thumbnailLoader = thumbnailLoader;
+			this.imageFileFactory = imageFileFactory;
 		}
 
 		#endregion
@@ -85,7 +88,7 @@ namespace FSpot.Import
 			created_directories = new Stack<SafeUri> ();
 			imported_photos = new List<uint> ();
 			photo_file_tracker = new PhotoFileTracker (fileSystem);
-			metadata_importer = new MetadataImporter (db.Tags);
+			metadata_importer = new MetadataImporter (db.Tags, imageFileFactory);
 
 			createdRoll = db.Rolls.Create ();
 
