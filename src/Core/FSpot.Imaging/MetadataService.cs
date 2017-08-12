@@ -37,7 +37,7 @@ namespace FSpot.Imaging
 {
 	static class MetadataService
 	{
-		public static IMetadata Parse (SafeUri uri)
+		public static ImageMetadata Parse (SafeUri uri)
 		{
 			// Detect mime-type
 			string mime;

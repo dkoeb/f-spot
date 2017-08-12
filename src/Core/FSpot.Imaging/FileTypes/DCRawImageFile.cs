@@ -38,7 +38,7 @@ namespace FSpot.Imaging.FileTypes
 	{
 		const string dcraw_command = "dcraw";
 
-		public override Stream PixbufStream (SafeUri uri, IMetadata metadata)
+		public override Stream PixbufStream (SafeUri uri, ImageMetadata metadata)
 		{
 			return RawPixbufStream (uri);
 		}
@@ -48,7 +48,7 @@ namespace FSpot.Imaging.FileTypes
 			string path = location.LocalPath;
 			string [] args = { dcraw_command, "-h", "-w", "-c", "-t", "0", path };
 
-			var proc = new InternalProcess (System.IO.Path.GetDirectoryName (path), args);
+			var proc = new InternalProcess (Path.GetDirectoryName (path), args);
 			proc.StandardInput.Close ();
 			return proc.StandardOutput;
 		}

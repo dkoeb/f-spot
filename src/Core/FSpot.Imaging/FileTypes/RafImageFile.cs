@@ -46,13 +46,13 @@ namespace FSpot.Imaging.FileTypes {
 
 	class RafImageFile : BaseImageFile
 	{
-		public override Stream PixbufStream (SafeUri uri, IMetadata metadata)
+		public override Stream PixbufStream (SafeUri uri, ImageMetadata metadata)
 		{
 			byte [] data = GetEmbeddedJpeg (uri, metadata);
 			return data != null ? new MemoryStream (data) : DCRawImageFile.RawPixbufStream (uri);
 		}
 
-		byte [] GetEmbeddedJpeg (SafeUri uri, IMetadata metadata)
+		byte [] GetEmbeddedJpeg (SafeUri uri, ImageMetadata metadata)
 		{
 			using (Stream stream = base.PixbufStream (uri, metadata)) {
 				stream.Position = 0x54;

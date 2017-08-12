@@ -33,7 +33,6 @@ using System;
 using System.IO;
 using Hyena;
 using TagLib;
-using TagLib.Flac;
 using TagLib.IFD;
 using TagLib.IFD.Entries;
 using TagLib.IFD.Tags;
@@ -130,7 +129,7 @@ namespace FSpot.Imaging.FileTypes
 	}*/
 	class DngImageFile : BaseImageFile
 	{
-		public override Stream PixbufStream (SafeUri uri, IMetadata metadata)
+		public override Stream PixbufStream (SafeUri uri, ImageMetadata metadata)
 		{
 			try {
 				Stream file = base.PixbufStream (uri, metadata);
@@ -141,7 +140,7 @@ namespace FSpot.Imaging.FileTypes
 			}
 		}
 
-		uint ExtractOffset (IMetadata metadata)
+		uint ExtractOffset (ImageMetadata metadata)
 		{
 			if (metadata == null)
 				return 0;

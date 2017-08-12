@@ -28,7 +28,6 @@
 
 using System;
 using Hyena;
-using TagLib;
 
 namespace FSpot.Imaging
 {
@@ -53,8 +52,6 @@ namespace FSpot.Imaging
 		void CopyFrom (IMetadata other);
 
 		void Save ();
-
-		Tag GetTag (TagTypes type);
 
 		void EnsureAvailableTags ();
 

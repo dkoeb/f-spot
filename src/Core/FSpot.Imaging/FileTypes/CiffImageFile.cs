@@ -38,7 +38,7 @@ namespace FSpot.Imaging.FileTypes
 {
 	class CiffImageFile : BaseImageFile
 	{
-		public override Stream PixbufStream (SafeUri uri, IMetadata metadata)
+		public override Stream PixbufStream (SafeUri uri, ImageMetadata metadata)
 		{
 			using (var stream = base.PixbufStream (uri, metadata)) {
 				byte[] data = GetEmbeddedJpeg (stream);

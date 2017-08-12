@@ -44,7 +44,7 @@ namespace FSpot.Imaging.FileTypes
 			return null;
 		}
 
-		public virtual Stream PixbufStream (SafeUri uri, IMetadata metadata)
+		public virtual Stream PixbufStream (SafeUri uri, ImageMetadata metadata)
 		{
 			Log.DebugFormat ("open uri = {0}", uri);
 			return new GLib.GioStream (GLib.FileFactory.NewForUri (uri).Read (null));
