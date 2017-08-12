@@ -30,8 +30,10 @@
 //
 
 using System;
+using System.IO;
 using Hyena;
 using TagLib;
+using TagLib.Flac;
 using TagLib.IFD;
 using TagLib.IFD.Entries;
 using TagLib.IFD.Tags;
@@ -128,20 +130,24 @@ namespace FSpot.Imaging.FileTypes
 	}*/
 	class DngImageFile : BaseImageFile
 	{
-		uint? offset;
-		uint Offset => offset ?? (offset = ExtractOffset ()).Value;
-
-		public DngImageFile (SafeUri uri) : base (uri)
+		public override Stream PixbufStream (SafeUri uri, IMetadata metadata)
 		{
+			try {
+				Stream file = base.PixbufStream (uri, metadata);
+				file.Position = ExtractOffset (metadata);
+				return file;
+			} catch {
+				return DCRawImageFile.RawPixbufStream (uri);
+			}
 		}
 
-		uint ExtractOffset ()
+		uint ExtractOffset (IMetadata metadata)
 		{
-			if (Metadata == null)
+			if (metadata == null)
 				return 0;
 
 			try {
-				var tag = Metadata.GetTag (TagTypes.TiffIFD) as IFDTag;
+				var tag = metadata.GetTag (TagTypes.TiffIFD) as IFDTag;
 				var structure = tag.Structure;
 				var sub_entries = (structure.GetEntry (0, (ushort)IFDEntryTag.SubIFDs) as SubIFDArrayEntry).Entries;
 				var subimage_structure = sub_entries [sub_entries.Length - 1];
@@ -151,17 +157,6 @@ namespace FSpot.Imaging.FileTypes
 				Log.DebugException (e);
 			}
 			return 0;
-		}
-
-		public override System.IO.Stream PixbufStream ()
-		{
-			try {
-				System.IO.Stream file = base.PixbufStream ();
-				file.Position = Offset;
-				return file;
-			} catch {
-				return DCRawImageFile.RawPixbufStream (Uri);
-			}
 		}
 	}
 }

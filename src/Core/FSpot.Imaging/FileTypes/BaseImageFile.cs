@@ -32,112 +32,22 @@
 
 using System.IO;
 using FSpot.Cms;
-using Gdk;
 using Hyena;
 
 namespace FSpot.Imaging.FileTypes
 {
-	class BaseImageFile : IImageFile
+	class BaseImageFile
 	{
-		#region fields
-
-		bool disposed;
-		IMetadata metadata;
-
-		#endregion
-
-		#region props
-
-		public SafeUri Uri { get; }
-
-		public ImageOrientation Orientation => Metadata?.Orientation ?? ImageOrientation.TopLeft;
-
-		public IMetadata Metadata => metadata ?? (metadata = MetadataService.Parse (Uri));
-
-		#endregion
-
-		#region ctors
-
-		public BaseImageFile (SafeUri uri)
-		{
-			Uri = uri;
-		}
-
-		#endregion
-
-		#region public API
-
-		public Pixbuf Load ()
-		{
-			using (Stream stream = PixbufStream ()) {
-				var orig = new Pixbuf (stream);
-				return TransformAndDispose (orig);
-			}
-		}
-
-		public Pixbuf Load (int maxWidth, int maxHeight)
-		{
-			using (var full = Load ()) {
-				return full.ScaleToMaxSize (maxWidth, maxHeight);
-			}
-		}
-
 		// FIXME this need to have an intent just like the loading stuff.
 		public virtual Profile GetProfile ()
 		{
 			return null;
 		}
 
-		public virtual Stream PixbufStream ()
+		public virtual Stream PixbufStream (SafeUri uri, IMetadata metadata)
 		{
-			Log.DebugFormat ("open uri = {0}", Uri);
-			return new GLib.GioStream (GLib.FileFactory.NewForUri (Uri).Read (null));
+			Log.DebugFormat ("open uri = {0}", uri);
+			return new GLib.GioStream (GLib.FileFactory.NewForUri (uri).Read (null));
 		}
-
-		#endregion
-
-		#region protected API
-
-		protected virtual void Close ()
-		{
-		}
-
-		#endregion
-
-		#region private
-
-		Pixbuf TransformAndDispose (Pixbuf orig)
-		{
-			if (orig == null)
-				return null;
-
-			Pixbuf rotated = orig.TransformOrientation (Orientation);
-
-			orig.Dispose ();
-
-			return rotated;
-		}
-
-		#endregion
-
-		#region IDisposable
-
-		public void Dispose ()
-		{
-			Dispose (true);
-			System.GC.SuppressFinalize (this);
-		}
-
-		protected virtual void Dispose (bool disposing)
-		{
-			if (disposed)
-				return;
-			disposed = true;
-
-			if (disposing)
-				Close ();
-		}
-
-		#endregion
 	}
 }

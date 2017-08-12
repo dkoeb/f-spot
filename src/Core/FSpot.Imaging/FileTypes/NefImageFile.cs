@@ -41,20 +41,19 @@ namespace FSpot.Imaging.FileTypes
 {
 	class NefImageFile : BaseImageFile
 	{
-		byte[] jpegData;
-		byte[] JpegData => jpegData ?? (jpegData = ExtractJpegData ());
-
-		public NefImageFile (SafeUri uri) : base (uri)
+		public override Stream PixbufStream (SafeUri uri, IMetadata metadata)
 		{
+			var jpegData = ExtractJpegData (metadata);
+			return jpegData != null ? new MemoryStream (jpegData) : DCRawImageFile.RawPixbufStream (uri);
 		}
 
-		byte[] ExtractJpegData ()
+		byte[] ExtractJpegData (IMetadata metadata)
 		{
-			if (Metadata == null)
+			if (metadata == null)
 				return null;
 
 			try {
-				var tag = Metadata.GetTag (TagTypes.TiffIFD) as IFDTag;
+				var tag = metadata.GetTag (TagTypes.TiffIFD) as IFDTag;
 				var structure = tag.Structure;
 				var SubImage1_structure = (structure.GetEntry (0, (ushort)IFDEntryTag.SubIFDs) as SubIFDArrayEntry).Entries [0];
 				var entry = SubImage1_structure.GetEntry (0, (ushort)IFDEntryTag.JPEGInterchangeFormat);
@@ -63,11 +62,6 @@ namespace FSpot.Imaging.FileTypes
 				Log.DebugException (e);
 			}
 			return null;
-		}
-
-		public override Stream PixbufStream ()
-		{
-			return JpegData != null ? new MemoryStream (jpegData) : DCRawImageFile.RawPixbufStream (Uri);
 		}
 	}
 }

@@ -54,6 +54,8 @@
     <Compile Include="FileTypes\NefImageFile.cs" />
     <Compile Include="FileTypes\RafImageFile.cs" />
     <Compile Include="IImageFile.cs" />
+    <Compile Include="ImageFile.cs" />
+    <Compile Include="ImageFileFactory.cs" />
     <Compile Include="ImageMetadata.cs" />
     <Compile Include="ImageOrientation.cs" />
     <Compile Include="ImageOrientationExtensions.cs" />
@@ -61,7 +63,7 @@
     <Compile Include="IOChannel.cs" />
     <Compile Include="InternalProcess.cs" />
     <Compile Include="ImageFormatException.cs" />
-    <Compile Include="ImageFileFactory.cs" />
+    <Compile Include="FileTypeFactory.cs" />
     <Compile Include="MetadataService.cs" />
     <Compile Include="ModuleController.cs" />
     <Compile Include="PixbufUtils.cs" />

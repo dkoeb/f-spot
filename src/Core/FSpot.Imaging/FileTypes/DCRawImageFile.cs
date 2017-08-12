@@ -29,6 +29,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+using System.IO;
 using Hyena;
 
 namespace FSpot.Imaging.FileTypes
@@ -37,16 +38,12 @@ namespace FSpot.Imaging.FileTypes
 	{
 		const string dcraw_command = "dcraw";
 
-		public DCRawImageFile (SafeUri uri) : base (uri)
+		public override Stream PixbufStream (SafeUri uri, IMetadata metadata)
 		{
+			return RawPixbufStream (uri);
 		}
 
-		public override System.IO.Stream PixbufStream ()
-		{
-			return RawPixbufStream (Uri);
-		}
-
-		internal static System.IO.Stream RawPixbufStream (SafeUri location)
+		internal static Stream RawPixbufStream (SafeUri location)
 		{
 			string path = location.LocalPath;
 			string [] args = { dcraw_command, "-h", "-w", "-c", "-t", "0", path };

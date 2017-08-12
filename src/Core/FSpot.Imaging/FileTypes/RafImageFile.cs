@@ -44,22 +44,17 @@ namespace FSpot.Imaging.FileTypes {
 
 	// ALL the sample files I have begin with "FUJIFILMCCD-RAW "
 
-	class RafImageFile : BaseImageFile {
-
-		public RafImageFile (SafeUri uri) : base (uri)
+	class RafImageFile : BaseImageFile
+	{
+		public override Stream PixbufStream (SafeUri uri, IMetadata metadata)
 		{
+			byte [] data = GetEmbeddedJpeg (uri, metadata);
+			return data != null ? new MemoryStream (data) : DCRawImageFile.RawPixbufStream (uri);
 		}
 
-		public override Stream PixbufStream ()
+		byte [] GetEmbeddedJpeg (SafeUri uri, IMetadata metadata)
 		{
-			byte [] data = GetEmbeddedJpeg ();
-
-			return data != null ? new MemoryStream (data) : DCRawImageFile.RawPixbufStream (Uri);
-		}
-
-		byte [] GetEmbeddedJpeg ()
-		{
-			using (Stream stream = base.PixbufStream ()) {
+			using (Stream stream = base.PixbufStream (uri, metadata)) {
 				stream.Position = 0x54;
 				var data = new byte [24];
 				stream.Read (data, 0, data.Length);
