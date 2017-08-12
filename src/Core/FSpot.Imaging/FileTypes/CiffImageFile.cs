@@ -31,10 +31,10 @@
 //
 
 using System.Collections.Generic;
-using Hyena;
 using System.IO;
+using Hyena;
 
-namespace FSpot.Imaging
+namespace FSpot.Imaging.FileTypes
 {
 	class CiffImageFile : BaseImageFile
 	{

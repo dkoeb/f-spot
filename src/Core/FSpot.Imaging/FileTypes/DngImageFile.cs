@@ -36,7 +36,7 @@ using TagLib.IFD;
 using TagLib.IFD.Entries;
 using TagLib.IFD.Tags;
 
-namespace FSpot.Imaging
+namespace FSpot.Imaging.FileTypes
 {
 	/*
 		public Cms.Profile GetProfile ()

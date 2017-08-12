@@ -1,5 +1,5 @@
 ﻿//
-// NefImageFile.cs
+// Cr2ImageFile.cs
 //
 // Author:
 //   Ruben Vermeersch <ruben@savanne.be>
@@ -30,20 +30,19 @@
 //
 
 using System;
-using System.IO;
 using Hyena;
 using TagLib;
 using TagLib.IFD;
 using TagLib.IFD.Entries;
 using TagLib.IFD.Tags;
 
-namespace FSpot.Imaging
+namespace FSpot.Imaging.FileTypes
 {
-	class NefImageFile : BaseImageFile
+	class Cr2ImageFile : BaseImageFile
 	{
-		byte[] jpeg_data;
+		uint offset;
 
-		public NefImageFile (SafeUri uri) : base (uri)
+		public Cr2ImageFile (SafeUri uri) : base (uri)
 		{
 		}
 
@@ -57,18 +56,18 @@ namespace FSpot.Imaging
 			try {
 				var tag = metadata.GetTag (TagTypes.TiffIFD) as IFDTag;
 				var structure = tag.Structure;
-				var SubImage1_structure = (structure.GetEntry (0, (ushort)IFDEntryTag.SubIFDs) as SubIFDArrayEntry).Entries [0];
-				var entry = SubImage1_structure.GetEntry (0, (ushort)IFDEntryTag.JPEGInterchangeFormat);
-				jpeg_data = (entry as ThumbnailDataIFDEntry).Data.Data;
+				var entry = structure.GetEntry (0, (ushort)IFDEntryTag.StripOffsets);
+				offset = (entry as StripOffsetsIFDEntry).Values [0];
 			} catch (Exception e) {
 				Log.DebugException (e);
-				jpeg_data = null;
 			}
 		}
 
-		public override Stream PixbufStream ()
+		public override System.IO.Stream PixbufStream ()
 		{
-			return jpeg_data != null ? new MemoryStream (jpeg_data) : DCRawImageFile.RawPixbufStream (Uri);
+			System.IO.Stream file = base.PixbufStream ();
+			file.Position = offset;
+			return file;
 		}
 	}
 }

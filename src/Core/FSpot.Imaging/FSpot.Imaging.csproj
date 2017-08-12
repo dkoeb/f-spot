@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -46,17 +46,17 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <Compile Include="FileTypes\BaseImageFile.cs" />
+    <Compile Include="FileTypes\CiffImageFile.cs" />
+    <Compile Include="FileTypes\Cr2ImageFile.cs" />
+    <Compile Include="FileTypes\DCRawImageFile.cs" />
+    <Compile Include="FileTypes\DngImageFile.cs" />
+    <Compile Include="FileTypes\NefImageFile.cs" />
+    <Compile Include="FileTypes\RafImageFile.cs" />
     <Compile Include="IImageFile.cs" />
     <Compile Include="IOChannel.cs" />
     <Compile Include="InternalProcess.cs" />
-    <Compile Include="BaseImageFile.cs" />
-    <Compile Include="DCRawImageFile.cs" />
     <Compile Include="ImageFormatException.cs" />
-    <Compile Include="CiffImageFile.cs" />
-    <Compile Include="Cr2ImageFile.cs" />
-    <Compile Include="DngImageFile.cs" />
-    <Compile Include="NefImageFile.cs" />
-    <Compile Include="RafImageFile.cs" />
     <Compile Include="ImageFileFactory.cs" />
     <Compile Include="ModuleController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

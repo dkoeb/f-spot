@@ -32,7 +32,7 @@
 using System.IO;
 using Hyena;
 
-namespace FSpot.Imaging {
+namespace FSpot.Imaging.FileTypes {
 	// This is reverse engineered from looking at the sample files I have
 	// from what I can tell the file is always BigEndian, although the embedded jpeg may not be
 	// and there is a start long offset at 0x54 (or possibly 0x56 if it is a short) that points to

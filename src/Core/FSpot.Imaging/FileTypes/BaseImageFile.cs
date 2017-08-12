@@ -36,7 +36,7 @@ using FSpot.Utils;
 using Hyena;
 using TagLib.Image;
 
-namespace FSpot.Imaging
+namespace FSpot.Imaging.FileTypes
 {
 	class BaseImageFile : IImageFile
 	{

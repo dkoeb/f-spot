@@ -36,6 +36,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FSpot.FileSystem;
+using FSpot.Imaging.FileTypes;
 using FSpot.Utils;
 using Gdk;
 using Hyena;
