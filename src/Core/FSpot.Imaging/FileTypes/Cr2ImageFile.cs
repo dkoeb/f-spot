@@ -41,14 +41,14 @@ namespace FSpot.Imaging.FileTypes
 {
 	class Cr2ImageFile : BaseImageFile
 	{
-		public override Stream PixbufStream (SafeUri uri, IMetadata metadata)
+		public override Stream PixbufStream (SafeUri uri, ImageMetadata metadata)
 		{
 			Stream file = base.PixbufStream (uri, metadata);
 			file.Position = ExtractOffset (metadata);
 			return file;
 		}
 
-		uint ExtractOffset (IMetadata metadata)
+		uint ExtractOffset (ImageMetadata metadata)
 		{
 			if (metadata == null)
 				return 0;

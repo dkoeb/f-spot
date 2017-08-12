@@ -40,19 +40,20 @@ namespace FSpot.Imaging
 
 		readonly FileTypeFactory fileTypeFactory;
 		BaseImageFile file;
-		IMetadata metadata;
+		ImageMetadata metadata;
 
 		#endregion
 
 		#region props
 
 		BaseImageFile File => file ?? (file = fileTypeFactory.Create (Uri));
+		ImageMetadata ImageMetadata => metadata ?? (metadata = MetadataService.Parse (Uri));
 
 		public SafeUri Uri { get; }
 
 		public ImageOrientation Orientation => Metadata?.Orientation ?? ImageOrientation.TopLeft;
 
-		public IMetadata Metadata => metadata ?? (metadata = MetadataService.Parse (Uri));
+		public IMetadata Metadata => ImageMetadata;
 
 		#endregion
 
@@ -90,7 +91,7 @@ namespace FSpot.Imaging
 
 		public Stream PixbufStream ()
 		{
-			return File.PixbufStream (Uri, Metadata);
+			return File.PixbufStream (Uri, ImageMetadata);
 		}
 
 		#endregion

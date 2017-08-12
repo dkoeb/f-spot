@@ -41,13 +41,13 @@ namespace FSpot.Imaging.FileTypes
 {
 	class NefImageFile : BaseImageFile
 	{
-		public override Stream PixbufStream (SafeUri uri, IMetadata metadata)
+		public override Stream PixbufStream (SafeUri uri, ImageMetadata metadata)
 		{
 			var jpegData = ExtractJpegData (metadata);
 			return jpegData != null ? new MemoryStream (jpegData) : DCRawImageFile.RawPixbufStream (uri);
 		}
 
-		byte[] ExtractJpegData (IMetadata metadata)
+		byte[] ExtractJpegData (ImageMetadata metadata)
 		{
 			if (metadata == null)
 				return null;
