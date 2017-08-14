@@ -60,6 +60,16 @@ namespace FSpot.FileSystem
 			source_file.Copy (destination_file, flags, null, null);
 		}
 
+		public void Move (SafeUri source, SafeUri destination, bool overwrite)
+		{
+			var source_file = FileFactory.NewForUri (source);
+			var destination_file = FileFactory.NewForUri (destination);
+			var flags = FileCopyFlags.AllMetadata;
+			if (overwrite)
+				flags |= FileCopyFlags.Overwrite;
+			source_file.Move (destination_file, flags, null, null);
+		}
+
 		public void Delete (SafeUri uri)
 		{
 			var file = FileFactory.NewForUri (uri);
