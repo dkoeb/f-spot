@@ -106,6 +106,15 @@ namespace FSpot.FileSystem
 			return new GioStream (file.Read (null));
 		}
 
+		public Stream Write (SafeUri uri)
+		{
+			var file = FileFactory.NewForUri (uri);
+			if (file.Exists) {
+				return new GioStream (file.OpenReadwrite (null));
+			}
+			return new GioStream (file.Create (FileCreateFlags.None, null));
+		}
+
 		#endregion
 	}
 }
