@@ -42,5 +42,6 @@ namespace FSpot.FileSystem
 		ulong GetMTime (SafeUri uri);
 		long GetSize (SafeUri uri);
 		Stream Read (SafeUri uri);
+		Stream Write (SafeUri uri);
 	}
 }
