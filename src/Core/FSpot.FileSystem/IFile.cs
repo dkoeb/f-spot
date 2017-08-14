@@ -36,6 +36,7 @@ namespace FSpot.FileSystem
 		bool Exists (SafeUri uri);
 		bool IsSymlink (SafeUri uri);
 		void Copy (SafeUri source, SafeUri destination, bool overwrite);
+		void Move (SafeUri source, SafeUri destinatoin, bool overwrite);
 		void Delete (SafeUri uri);
 		string GetMimeType (SafeUri uri);
 		ulong GetMTime (SafeUri uri);
