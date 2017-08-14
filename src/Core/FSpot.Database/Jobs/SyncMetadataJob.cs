@@ -32,6 +32,7 @@
 using System;
 using Banshee.Kernel;
 using FSpot.Core;
+using FSpot.FileSystem;
 using FSpot.Imaging;
 using FSpot.Settings;
 using FSpot.Utils;
@@ -96,7 +97,8 @@ namespace FSpot.Database.Jobs
 				metadata.Software = Defines.PACKAGE + " version " + Defines.VERSION;
 
 				var alwaysSidecar = Preferences.Get<bool> (Preferences.METADATA_ALWAYS_USE_SIDECAR);
-				metadata.SaveSafely (photo.DefaultVersion.Uri, alwaysSidecar);
+				var fileSystem = Container.Resolve<IFileSystem> ();
+				metadata.SaveSafely (photo.DefaultVersion.Uri, alwaysSidecar, fileSystem);
 			}
 		}
 	}

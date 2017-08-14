@@ -49,7 +49,7 @@ namespace FSpot.Imaging
 		#region props
 
 		BaseImageFile File => file ?? (file = fileTypeFactory.Create (Uri));
-		ImageMetadata ImageMetadata => metadata ?? (metadata = MetadataService.Parse (Uri));
+		ImageMetadata ImageMetadata => metadata ?? (metadata = MetadataService.Parse (Uri, fileSystem));
 
 		public SafeUri Uri { get; }
 

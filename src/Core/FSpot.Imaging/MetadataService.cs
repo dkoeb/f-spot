@@ -30,23 +30,21 @@
 using System;
 using System.IO;
 using FSpot.Utils;
-using GLib;
 using Hyena;
 using TagLib;
 using TagLib.Xmp;
+using FSpot.FileSystem;
 
 namespace FSpot.Imaging
 {
 	static class MetadataService
 	{
-		public static ImageMetadata Parse (SafeUri uri)
+		public static ImageMetadata Parse (SafeUri uri, IFileSystem fileSystem)
 		{
 			// Detect mime-type
 			string mime;
 			try {
-				var gfile = FileFactory.NewForUri (uri);
-				var info = gfile.QueryInfo ("standard::content-type", FileQueryInfoFlags.None, null);
-				mime = info.ContentType;
+				mime = fileSystem.File.GetMimeType (uri);
 			} catch (Exception e) {
 				Hyena.Log.DebugException (e);
 				return null;
@@ -58,9 +56,9 @@ namespace FSpot.Imaging
 			}
 
 			// Parse file
-			var res = new GIOTagLibFileAbstraction { Uri = uri };
-			var sidecarUri = GetSidecarUri (uri);
-			var sidecarRes = new GIOTagLibFileAbstraction { Uri = sidecarUri };
+			var res = new TagLibFileAbstraction (fileSystem) { Uri = uri };
+			var sidecarUri = GetSidecarUri (uri, fileSystem);
+			var sidecarRes = new TagLibFileAbstraction (fileSystem) { Uri = sidecarUri };
 
 			TagLib.Image.File file;
 			try {
@@ -78,8 +76,7 @@ namespace FSpot.Imaging
 			}
 
 			// Load XMP sidecar
-			var sidecarFile = FileFactory.NewForUri (sidecarUri);
-			if (sidecarFile.Exists) {
+			if (fileSystem.File.Exists (sidecarUri)) {
 				ParseXmpSidecar (file, sidecarRes);
 			}
 
@@ -92,13 +89,12 @@ namespace FSpot.Imaging
 			p => p.ReplaceExtension (".xmp")
 		};
 
-		internal static SafeUri GetSidecarUri (SafeUri photoUri)
+		internal static SafeUri GetSidecarUri (SafeUri photoUri, IFileSystem fileSystem)
 		{
 			// First probe for existing sidecar files, use the one that's found.
 			foreach (var generator in SidecarNameGenerators) {
 				var name = generator (photoUri);
-				var file = FileFactory.NewForUri (name);
-				if (file.Exists) {
+				if (fileSystem.File.Exists (name)) {
 					return name;
 				}
 			}

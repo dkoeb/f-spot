@@ -33,6 +33,8 @@ using TagLib.IFD;
 using TagLib.IFD.Entries;
 using TagLib.IFD.Tags;
 using TagLib.Xmp;
+using FSpot.FileSystem;
+using FSpot.FileSystem.UnitTest;
 
 namespace FSpot.Utils.Tests
 {
@@ -40,6 +42,8 @@ namespace FSpot.Utils.Tests
 	[TestFixture]
 	public class GIOTagLibFileAbstractionTests
 	{
+		readonly IFileSystem fileSystem = TestFileSystem.Create ();
+
 		[SetUp]
 		public void Initialize ()
 		{
@@ -71,7 +75,7 @@ namespace FSpot.Utils.Tests
 		{
 			var uri = ImageTestHelper.CreateTempFile ("taglib-sample.jpg");
 
-			var res = new GIOTagLibFileAbstraction () { Uri = uri };
+			var res = new TagLibFileAbstraction (fileSystem) { Uri = uri };
 
 			var file = File.Create (res) as TagLib.Image.File;
 			Assert.IsTrue (file != null);

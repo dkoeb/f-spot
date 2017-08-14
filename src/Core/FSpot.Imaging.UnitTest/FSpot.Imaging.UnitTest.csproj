@@ -77,6 +77,10 @@
       <Project>{942B6AEF-0A90-4A7F-B8E4-F1A4327E408C}</Project>
       <Name>gio-sharp</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FSpot.FileSystem.UnitTest\FSpot.FileSystem.UnitTest.csproj">
+      <Project>{0E62658B-1CD4-450B-A5BA-F2BA8C04504F}</Project>
+      <Name>FSpot.FileSystem.UnitTest</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
