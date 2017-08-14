@@ -51,16 +51,9 @@ namespace FSpot.Utils
 
 		const string TMP_INFIX = ".tmpwrite";
 
-		public string Name {
-			get {
-				return Uri.ToString ();
-			}
-			set {
-				Uri = new SafeUri (value);
-			}
-		}
+		public string Name => Uri.ToString ();
 
-		public SafeUri Uri { get; set; }
+		public SafeUri Uri { get; }
 
 		public Stream ReadStream {
 			get {
@@ -90,8 +83,9 @@ namespace FSpot.Utils
 			}
 		}
 
-		public TagLibFileAbstraction (IFileSystem fileSystem)
+		public TagLibFileAbstraction (SafeUri uri, IFileSystem fileSystem)
 		{
+			Uri = uri;
 			this.fileSystem = fileSystem;
 		}
 

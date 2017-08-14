@@ -136,9 +136,7 @@ namespace FSpot.Imaging
 						$"Metadata of file {photoUri} may be corrupt, refusing to write to it, falling back to XMP sidecar.");
 				}
 
-				var sidecarRes = new TagLibFileAbstraction (fileSystem) {
-					Uri = MetadataService.GetSidecarUri (photoUri, fileSystem)
-				};
+				var sidecarRes = new TagLibFileAbstraction (MetadataService.GetSidecarUri (photoUri, fileSystem), fileSystem);
 
 				MetadataService.SaveXmpSidecar (metadata, sidecarRes);
 			}

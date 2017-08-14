@@ -56,9 +56,9 @@ namespace FSpot.Imaging
 			}
 
 			// Parse file
-			var res = new TagLibFileAbstraction (fileSystem) { Uri = uri };
+			var res = new TagLibFileAbstraction (uri, fileSystem);
 			var sidecarUri = GetSidecarUri (uri, fileSystem);
-			var sidecarRes = new TagLibFileAbstraction (fileSystem) { Uri = sidecarUri };
+			var sidecarRes = new TagLibFileAbstraction (sidecarUri, fileSystem);
 
 			TagLib.Image.File file;
 			try {
