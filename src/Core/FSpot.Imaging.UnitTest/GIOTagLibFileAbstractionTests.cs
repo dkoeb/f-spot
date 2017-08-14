@@ -75,7 +75,7 @@ namespace FSpot.Utils.Tests
 		{
 			var uri = ImageTestHelper.CreateTempFile ("taglib-sample.jpg");
 
-			var res = new TagLibFileAbstraction (fileSystem) { Uri = uri };
+			var res = new TagLibFileAbstraction (uri, fileSystem);
 
 			var file = File.Create (res) as TagLib.Image.File;
 			Assert.IsTrue (file != null);

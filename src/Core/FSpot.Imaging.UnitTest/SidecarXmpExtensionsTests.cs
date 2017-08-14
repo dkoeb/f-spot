@@ -56,7 +56,7 @@ namespace FSpot.Utils.Tests
 		{
 			// Tests the file in its original state
 			var uri = ImageTestHelper.CreateTempFile ("taglib-sample.jpg");
-			var res = new TagLibFileAbstraction (fileSystem) { Uri = uri };
+			var res = new TagLibFileAbstraction (uri, fileSystem);
 
 			var file = File.Create (res) as TagLib.Image.File;
 			Assert.IsNotNull (file);
@@ -82,9 +82,9 @@ namespace FSpot.Utils.Tests
 		{
 			// Tests the file with a sidecar
 			var uri = ImageTestHelper.CreateTempFile ("taglib-sample.jpg");
-			var res = new TagLibFileAbstraction (fileSystem) { Uri = uri };
+			var res = new TagLibFileAbstraction (uri, fileSystem);
 			var sidecar_uri = ImageTestHelper.CopySidecarToTest (uri, "taglib-sample.xmp");
-			var sidecar_res = new TagLibFileAbstraction (fileSystem) { Uri = sidecar_uri };
+			var sidecar_res = new TagLibFileAbstraction (sidecar_uri, fileSystem);
 
 			var file = File.Create (res) as TagLib.Image.File;
 			Assert.IsNotNull (file);
@@ -112,9 +112,9 @@ namespace FSpot.Utils.Tests
 		{
 			// Tests the file with a sidecar
 			var uri = ImageTestHelper.CreateTempFile ("taglib-sample.jpg");
-			var res = new TagLibFileAbstraction (fileSystem) { Uri = uri };
+			var res = new TagLibFileAbstraction (uri, fileSystem);
 			var sidecar_uri = ImageTestHelper.CopySidecarToTest (uri, "taglib-sample-broken.xmp");
-			var sidecar_res = new TagLibFileAbstraction (fileSystem) { Uri = sidecar_uri };
+			var sidecar_res = new TagLibFileAbstraction (sidecar_uri, fileSystem);
 
 			var file = File.Create (res) as TagLib.Image.File;
 			Assert.IsNotNull (file);
@@ -144,8 +144,8 @@ namespace FSpot.Utils.Tests
 		{
 			var uri = ImageTestHelper.CreateTempFile ("taglib-sample.jpg");
 			var sidecar_uri = uri.ReplaceExtension (".xmp");
-			var res = new TagLibFileAbstraction (fileSystem) { Uri = uri };
-			var sidecar_res = new TagLibFileAbstraction (fileSystem) { Uri = sidecar_uri };
+			var res = new TagLibFileAbstraction (uri, fileSystem);
+			var sidecar_res = new TagLibFileAbstraction (sidecar_uri, fileSystem);
 			Assert.IsTrue (sidecar_uri.ToString ().EndsWith (".xmp"));
 
 			var sidecar_file = GLib.FileFactory.NewForUri (sidecar_uri);
@@ -178,7 +178,7 @@ namespace FSpot.Utils.Tests
 				+ "</rdf:RDF></x:xmpmeta>";
 
 			string written;
-			var read_res = new TagLibFileAbstraction (fileSystem) { Uri = sidecar_uri };
+			var read_res = new TagLibFileAbstraction (sidecar_uri, fileSystem);
 			using (var stream = read_res.ReadStream) {
 				using (var reader = new System.IO.StreamReader (stream)) {
 					written = reader.ReadToEnd ();
