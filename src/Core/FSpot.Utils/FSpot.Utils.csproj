@@ -40,11 +40,9 @@
     <Compile Include="DisposableCache.cs" />
     <Compile Include="FileExtensions.cs" />
     <Compile Include="GdkUtils.cs" />
-    <Compile Include="GIOTagLibFileAbstraction.cs" />
     <Compile Include="GtkUtil.cs" />
     <Compile Include="HashUtils.cs" />
     <Compile Include="SafeUriExtensions.cs" />
-    <Compile Include="SidecarXmpExtensions.cs" />
     <Compile Include="TargetListExtensionMethods.cs" />
     <Compile Include="UriExtensions.cs" />
     <Compile Include="UriList.cs" />
@@ -71,10 +69,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\external\taglib-sharp\src\taglib-sharp.csproj">
-      <Project>{6B143A39-C7B2-4743-9917-92262C60E9A6}</Project>
-      <Name>taglib-sharp</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\lib\Hyena\Hyena\Hyena.csproj">
       <Project>{95374549-9553-4C1E-9D89-667755F90E12}</Project>
       <Name>Hyena</Name>

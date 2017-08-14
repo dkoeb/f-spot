@@ -72,6 +72,7 @@
     <Compile Include="ImageLoaderThread.cs" />
     <Compile Include="IImageLoaderThread.cs" />
     <Compile Include="RequestItem.cs" />
+    <Compile Include="GIOTagLibFileAbstraction.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\external\taglib-sharp\src\taglib-sharp.csproj">

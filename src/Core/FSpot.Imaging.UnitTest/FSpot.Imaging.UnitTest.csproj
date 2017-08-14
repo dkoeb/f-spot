@@ -44,6 +44,9 @@
     <Compile Include="MetadataTest.cs" />
     <Compile Include="TestOf_ImageFile.cs" />
     <Compile Include="ImageFileTests.cs" />
+    <Compile Include="GIOTagLibFileAbstractionTests.cs" />
+    <Compile Include="SidecarXmpExtensionsTests.cs" />
+    <Compile Include="ImageTestHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\lib\Hyena\Hyena\Hyena.csproj">
@@ -70,8 +73,24 @@
       <Project>{ce160879-1bf0-4711-a18f-fda2772900fa}</Project>
       <Name>FSpot.Utils</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\lib\gio-sharp\gio-sharp.csproj">
+      <Project>{942B6AEF-0A90-4A7F-B8E4-F1A4327E408C}</Project>
+      <Name>gio-sharp</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="TestData\taglib-sample.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="TestData\taglib-sample.xmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="TestData\taglib-sample-broken.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="TestData\taglib-sample-broken.xmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
