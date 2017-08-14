@@ -137,7 +137,7 @@ namespace FSpot.Imaging
 
 				var sidecarRes = new GIOTagLibFileAbstraction {Uri = MetadataService.GetSidecarUri (photoUri)};
 
-				metadata.SaveXmpSidecar (sidecarRes);
+				MetadataService.SaveXmpSidecar (metadata, sidecarRes);
 			}
 			else {
 				metadata.Save ();

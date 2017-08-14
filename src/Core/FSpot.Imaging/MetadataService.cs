@@ -28,10 +28,12 @@
 //
 
 using System;
+using System.IO;
 using FSpot.Utils;
 using GLib;
 using Hyena;
 using TagLib;
+using TagLib.Xmp;
 
 namespace FSpot.Imaging
 {
@@ -78,16 +80,16 @@ namespace FSpot.Imaging
 			// Load XMP sidecar
 			var sidecarFile = FileFactory.NewForUri (sidecarUri);
 			if (sidecarFile.Exists) {
-				file.ParseXmpSidecar (sidecarRes);
+				ParseXmpSidecar (file, sidecarRes);
 			}
 
 			return new ImageMetadata (file);
 		}
 
 		delegate SafeUri GenerateSideCarName (SafeUri photoUri);
-		static readonly GenerateSideCarName[] SidecarNameGenerators = {
+		static readonly GenerateSideCarName [] SidecarNameGenerators = {
 			p => new SafeUri (p.AbsoluteUri + ".xmp"),
-			p => p.ReplaceExtension (".xmp"),
+			p => p.ReplaceExtension (".xmp")
 		};
 
 		internal static SafeUri GetSidecarUri (SafeUri photoUri)
@@ -102,7 +104,68 @@ namespace FSpot.Imaging
 			}
 
 			// Fall back to the default strategy.
-			return SidecarNameGenerators[0] (photoUri);
+			return SidecarNameGenerators [0] (photoUri);
+		}
+
+		/// <summary>
+		///    Parses the XMP file identified by resource and replaces the XMP
+		///    tag of file by the parsed data.
+		/// </summary>
+		public static bool ParseXmpSidecar (TagLib.Image.File file, TagLib.File.IFileAbstraction resource)
+		{
+			string xmp;
+
+			try {
+				using (var stream = resource.ReadStream) {
+					using (var reader = new StreamReader (stream)) {
+						xmp = reader.ReadToEnd ();
+					}
+				}
+			} catch (Exception e) {
+				Hyena.Log.DebugFormat ($"Sidecar cannot be read for file {file.Name}");
+				Hyena.Log.DebugException (e);
+				return false;
+			}
+
+			XmpTag tag = null;
+			try {
+				tag = new XmpTag (xmp, file);
+			} catch (Exception e) {
+				Hyena.Log.DebugFormat ($"Metadata of Sidecar cannot be parsed for file {file.Name}");
+				Hyena.Log.DebugException (e);
+				return false;
+			}
+
+			var xmp_tag = file.GetTag (TagTypes.XMP, true) as XmpTag;
+			xmp_tag.ReplaceFrom (tag);
+			return true;
+		}
+
+		public static bool SaveXmpSidecar (TagLib.Image.File file, TagLib.File.IFileAbstraction resource)
+		{
+			var xmp_tag = file.GetTag (TagTypes.XMP, false) as XmpTag;
+			if (xmp_tag == null) {
+				// TODO: Delete File
+				return true;
+			}
+
+			var xmp = xmp_tag.Render ();
+
+			try {
+				using (var stream = resource.WriteStream) {
+					stream.SetLength (0);
+					using (var writer = new StreamWriter (stream)) {
+						writer.Write (xmp);
+					}
+					resource.CloseStream (stream);
+				}
+			} catch (Exception e) {
+				Hyena.Log.DebugFormat ($"Sidecar cannot be saved: {resource.Name}");
+				Hyena.Log.DebugException (e);
+				return false;
+			}
+
+			return true;
 		}
 	}
 }
