@@ -33,14 +33,15 @@
 using System.Collections.Generic;
 using System.IO;
 using Hyena;
+using FSpot.FileSystem;
 
 namespace FSpot.Imaging.FileTypes
 {
 	class CiffImageFile : BaseImageFile
 	{
-		public override Stream PixbufStream (SafeUri uri, ImageMetadata metadata)
+		public override Stream PixbufStream (SafeUri uri, ImageMetadata metadata, IFileSystem fileSystem)
 		{
-			using (var stream = base.PixbufStream (uri, metadata)) {
+			using (var stream = base.PixbufStream (uri, metadata, fileSystem)) {
 				byte[] data = GetEmbeddedJpeg (stream);
 				return data != null ? new MemoryStream (data) : DCRawImageFile.RawPixbufStream (uri);
 			}

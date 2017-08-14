@@ -36,14 +36,15 @@ using TagLib;
 using TagLib.IFD;
 using TagLib.IFD.Entries;
 using TagLib.IFD.Tags;
+using FSpot.FileSystem;
 
 namespace FSpot.Imaging.FileTypes
 {
 	class Cr2ImageFile : BaseImageFile
 	{
-		public override Stream PixbufStream (SafeUri uri, ImageMetadata metadata)
+		public override Stream PixbufStream (SafeUri uri, ImageMetadata metadata, IFileSystem fileSystem)
 		{
-			Stream file = base.PixbufStream (uri, metadata);
+			Stream file = base.PixbufStream (uri, metadata, fileSystem);
 			file.Position = ExtractOffset (metadata);
 			return file;
 		}

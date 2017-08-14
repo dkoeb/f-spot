@@ -32,6 +32,7 @@
 
 using System.IO;
 using FSpot.Cms;
+using FSpot.FileSystem;
 using Hyena;
 
 namespace FSpot.Imaging.FileTypes
@@ -44,10 +45,10 @@ namespace FSpot.Imaging.FileTypes
 			return null;
 		}
 
-		public virtual Stream PixbufStream (SafeUri uri, ImageMetadata metadata)
+		public virtual Stream PixbufStream (SafeUri uri, ImageMetadata metadata, IFileSystem fileSystem)
 		{
 			Log.DebugFormat ("open uri = {0}", uri);
-			return new GLib.GioStream (GLib.FileFactory.NewForUri (uri).Read (null));
+			return fileSystem.File.Read (uri);
 		}
 	}
 }

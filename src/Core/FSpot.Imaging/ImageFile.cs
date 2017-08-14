@@ -31,6 +31,7 @@ using FSpot.Cms;
 using FSpot.Imaging.FileTypes;
 using Gdk;
 using Hyena;
+using FSpot.FileSystem;
 
 namespace FSpot.Imaging
 {
@@ -39,6 +40,7 @@ namespace FSpot.Imaging
 		#region fields
 
 		readonly FileTypeFactory fileTypeFactory;
+		readonly IFileSystem fileSystem;
 		BaseImageFile file;
 		ImageMetadata metadata;
 
@@ -59,10 +61,11 @@ namespace FSpot.Imaging
 
 		#region ctors
 
-		public ImageFile (SafeUri uri, FileTypeFactory fileTypeFactory)
+		public ImageFile (SafeUri uri, FileTypeFactory fileTypeFactory, IFileSystem fileSystem)
 		{
 			Uri = uri;
 			this.fileTypeFactory = fileTypeFactory;
+			this.fileSystem = fileSystem;
 		}
 
 		#endregion
@@ -91,7 +94,7 @@ namespace FSpot.Imaging
 
 		public Stream PixbufStream ()
 		{
-			return File.PixbufStream (Uri, ImageMetadata);
+			return File.PixbufStream (Uri, ImageMetadata, fileSystem);
 		}
 
 		#endregion

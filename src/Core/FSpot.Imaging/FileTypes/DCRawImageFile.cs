@@ -31,6 +31,7 @@
 
 using System.IO;
 using Hyena;
+using FSpot.FileSystem;
 
 namespace FSpot.Imaging.FileTypes
 {
@@ -38,7 +39,7 @@ namespace FSpot.Imaging.FileTypes
 	{
 		const string dcraw_command = "dcraw";
 
-		public override Stream PixbufStream (SafeUri uri, ImageMetadata metadata)
+		public override Stream PixbufStream (SafeUri uri, ImageMetadata metadata, IFileSystem fileSystem)
 		{
 			return RawPixbufStream (uri);
 		}
