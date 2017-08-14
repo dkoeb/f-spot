@@ -31,6 +31,7 @@
 
 using System.IO;
 using Hyena;
+using FSpot.FileSystem;
 
 namespace FSpot.Imaging.FileTypes {
 	// This is reverse engineered from looking at the sample files I have
@@ -46,15 +47,15 @@ namespace FSpot.Imaging.FileTypes {
 
 	class RafImageFile : BaseImageFile
 	{
-		public override Stream PixbufStream (SafeUri uri, ImageMetadata metadata)
+		public override Stream PixbufStream (SafeUri uri, ImageMetadata metadata, IFileSystem fileSystem)
 		{
-			byte [] data = GetEmbeddedJpeg (uri, metadata);
+			byte [] data = GetEmbeddedJpeg (uri, metadata, fileSystem);
 			return data != null ? new MemoryStream (data) : DCRawImageFile.RawPixbufStream (uri);
 		}
 
-		byte [] GetEmbeddedJpeg (SafeUri uri, ImageMetadata metadata)
+		byte [] GetEmbeddedJpeg (SafeUri uri, ImageMetadata metadata, IFileSystem fileSystem)
 		{
-			using (Stream stream = base.PixbufStream (uri, metadata)) {
+			using (Stream stream = base.PixbufStream (uri, metadata, fileSystem)) {
 				stream.Position = 0x54;
 				var data = new byte [24];
 				stream.Read (data, 0, data.Length);

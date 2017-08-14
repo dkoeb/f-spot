@@ -35,15 +35,17 @@ namespace FSpot.Imaging
 	class ImageFileFactory : IImageFileFactory
 	{
 		readonly FileTypeFactory fileTypeFactory;
+		readonly IFileSystem fileSystem;
 
 		public ImageFileFactory (IFileSystem fileSystem)
 		{
 			fileTypeFactory = new FileTypeFactory (fileSystem);
+			this.fileSystem = fileSystem;
 		}
 
 		public IImageFile Create (SafeUri uri)
 		{
-			return new ImageFile (uri, fileTypeFactory);
+			return new ImageFile (uri, fileTypeFactory, fileSystem);
 		}
 
 		public bool HasLoader (SafeUri uri)

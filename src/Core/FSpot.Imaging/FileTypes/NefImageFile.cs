@@ -36,12 +36,13 @@ using TagLib;
 using TagLib.IFD;
 using TagLib.IFD.Entries;
 using TagLib.IFD.Tags;
+using FSpot.FileSystem;
 
 namespace FSpot.Imaging.FileTypes
 {
 	class NefImageFile : BaseImageFile
 	{
-		public override Stream PixbufStream (SafeUri uri, ImageMetadata metadata)
+		public override Stream PixbufStream (SafeUri uri, ImageMetadata metadata, IFileSystem fileSystem)
 		{
 			var jpegData = ExtractJpegData (metadata);
 			return jpegData != null ? new MemoryStream (jpegData) : DCRawImageFile.RawPixbufStream (uri);
