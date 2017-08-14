@@ -72,16 +72,12 @@
     <Compile Include="ImageLoaderThread.cs" />
     <Compile Include="IImageLoaderThread.cs" />
     <Compile Include="RequestItem.cs" />
-    <Compile Include="GIOTagLibFileAbstraction.cs" />
+    <Compile Include="TagLibFileAbstraction.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\external\taglib-sharp\src\taglib-sharp.csproj">
       <Project>{6B143A39-C7B2-4743-9917-92262C60E9A6}</Project>
       <Name>taglib-sharp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\lib\gio-sharp\gio-sharp.csproj">
-      <Project>{942B6AEF-0A90-4A7F-B8E4-F1A4327E408C}</Project>
-      <Name>gio-sharp</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\lib\gtk-sharp-beans\gtk-sharp-beans.csproj">
       <Project>{069D1797-427D-4CED-A754-233DE64FC5DD}</Project>

@@ -28,6 +28,7 @@
 
 using System;
 using Hyena;
+using FSpot.FileSystem;
 
 namespace FSpot.Imaging
 {
@@ -55,6 +56,6 @@ namespace FSpot.Imaging
 
 		void EnsureAvailableTags ();
 
-		void SaveSafely (SafeUri photoUri, bool alwaysSidecar);
+		void SaveSafely (SafeUri photoUri, bool alwaysSidecar, IFileSystem fileSystem);
 	}
 }

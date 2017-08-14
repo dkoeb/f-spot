@@ -1,5 +1,5 @@
 //
-// GIOTagLibFileAbstraction.cs
+// TagLibFileAbstraction.cs
 //
 // Author:
 //   Ruben Vermeersch <ruben@savanne.be>
@@ -29,13 +29,13 @@
 
 using System;
 using System.IO;
-using GLib;
+using FSpot.FileSystem;
 using Hyena;
 
 namespace FSpot.Utils
 {
 	/// <summary>
-	///   Wraps GIO into a TagLib IFileAbstraction.
+	///   Wraps IFileSystem into a TagLib IFileAbstraction.
 	/// </summary>
 	/// <remarks>
 	///   Implements a safe writing pattern by first copying the file to a
@@ -43,9 +43,10 @@ namespace FSpot.Utils
 	///   stream is closed, the temporary file is moved to the original
 	///   location.
 	/// </remarks>
-	sealed class GIOTagLibFileAbstraction : TagLib.File.IFileAbstraction
+	sealed class TagLibFileAbstraction : TagLib.File.IFileAbstraction
 	{
-		GioStream stream;
+		readonly IFileSystem fileSystem;
+		Stream stream;
 		SafeUri tmp_write_uri;
 
 		const string TMP_INFIX = ".tmpwrite";
@@ -64,8 +65,7 @@ namespace FSpot.Utils
 		public Stream ReadStream {
 			get {
 				if (stream == null) {
-					var file = FileFactory.NewForUri (Uri);
-					stream = new GioStream (file.Read (null));
+					stream = fileSystem.File.Read (Uri);
 				}
 				if (!stream.CanRead)
 					throw new Exception ("Can't read from this resource");
@@ -76,13 +76,11 @@ namespace FSpot.Utils
 		public Stream WriteStream {
 			get {
 				if (stream == null) {
-					var file = FileFactory.NewForUri (Uri);
-					if (!file.Exists) {
-						stream = new GioStream (file.Create (FileCreateFlags.None, null));
+					if (!fileSystem.File.Exists (Uri)) {
+						stream = fileSystem.File.Write (Uri);
 					} else {
 						CopyToTmp ();
-						file = FileFactory.NewForUri (tmp_write_uri);
-						stream = new GioStream (file.OpenReadwrite (null));
+						stream = fileSystem.File.Write (tmp_write_uri);
 					}
 				}
 				if (!stream.CanWrite) {
@@ -92,13 +90,15 @@ namespace FSpot.Utils
 			}
 		}
 
+		public TagLibFileAbstraction (IFileSystem fileSystem)
+		{
+			this.fileSystem = fileSystem;
+		}
+
 		void CopyToTmp ()
 		{
-			var file = FileFactory.NewForUri (Uri);
 			tmp_write_uri = CreateTmpFile ();
-			var tmp_file = FileFactory.NewForUri (tmp_write_uri);
-
-			file.Copy (tmp_file, FileCopyFlags.AllMetadata | FileCopyFlags.Overwrite, null, null);
+			fileSystem.File.Copy (Uri, tmp_write_uri, true);
 		}
 
 		void CommitTmp ()
@@ -106,10 +106,7 @@ namespace FSpot.Utils
 			if (tmp_write_uri == null)
 				return;
 
-			var file = FileFactory.NewForUri (Uri);
-			var tmp_file = FileFactory.NewForUri (tmp_write_uri);
-
-			tmp_file.Move (file, FileCopyFlags.AllMetadata | FileCopyFlags.Overwrite, null, null);
+			fileSystem.File.Move (tmp_write_uri, Uri, true);
 		}
 
 		SafeUri CreateTmpFile ()

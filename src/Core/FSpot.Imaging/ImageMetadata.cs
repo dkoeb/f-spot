@@ -31,6 +31,7 @@ using FSpot.Utils;
 using Hyena;
 using TagLib;
 using File = TagLib.Image.File;
+using FSpot.FileSystem;
 
 namespace FSpot.Imaging
 {
@@ -127,7 +128,7 @@ namespace FSpot.Imaging
 			metadata.EnsureAvailableTags ();
 		}
 
-		public void SaveSafely (SafeUri photoUri, bool alwaysSidecar)
+		public void SaveSafely (SafeUri photoUri, bool alwaysSidecar, IFileSystem fileSystem)
 		{
 			if (alwaysSidecar || !metadata.Writeable || metadata.PossiblyCorrupt) {
 				if (!alwaysSidecar && metadata.PossiblyCorrupt) {
@@ -135,7 +136,9 @@ namespace FSpot.Imaging
 						$"Metadata of file {photoUri} may be corrupt, refusing to write to it, falling back to XMP sidecar.");
 				}
 
-				var sidecarRes = new GIOTagLibFileAbstraction {Uri = MetadataService.GetSidecarUri (photoUri)};
+				var sidecarRes = new TagLibFileAbstraction (fileSystem) {
+					Uri = MetadataService.GetSidecarUri (photoUri, fileSystem)
+				};
 
 				MetadataService.SaveXmpSidecar (metadata, sidecarRes);
 			}

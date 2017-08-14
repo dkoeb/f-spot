@@ -80,6 +80,10 @@
       <Project>{423B5DED-65C8-4C4A-9DBB-7D7BD440F78F}</Project>
       <Name>FSpot.Settings</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FSpot.FileSystem\FSpot.FileSystem.csproj">
+      <Project>{F7821E0B-6861-47D7-9FCE-F853CDF2F838}</Project>
+      <Name>FSpot.FileSystem</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Db.cs" />

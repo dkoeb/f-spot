@@ -274,8 +274,8 @@ namespace FSpot.Imaging
 		{
 			SaveToSuitableFormat (destination, pixbuf, jpegQuality);
 
-			using (var metadataFrom = MetadataService.Parse (source)) {
-				using (var metadataTo = MetadataService.Parse (destination)) {
+			using (var metadataFrom = MetadataService.Parse (source, fileSystem)) {
+				using (var metadataTo = MetadataService.Parse (destination, fileSystem)) {
 					metadataTo.CopyFrom (metadataFrom);
 
 					// Reset orientation to make sure images appear upright.

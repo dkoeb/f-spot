@@ -46,6 +46,7 @@ using Hyena;
 using Hyena.Widgets;
 
 using Mono.Unix;
+using FSpot.FileSystem;
 
 namespace FSpot
 {
@@ -95,7 +96,8 @@ namespace FSpot
 
 					metadata.Orientation = orientation;
 					var always_sidecar = Preferences.Get<bool> (Preferences.METADATA_ALWAYS_USE_SIDECAR);
-					metadata.SaveSafely (uri, always_sidecar);
+					var fileSystem = App.Instance.Container.Resolve<IFileSystem> ();
+					metadata.SaveSafely (uri, always_sidecar, fileSystem);
 					App.Instance.Container.Resolve<IThumbnailService> ().DeleteThumbnails (uri);
 				}
 			} catch (Exception e) {
