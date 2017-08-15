@@ -37,7 +37,6 @@
     <Compile Include="IBrowsableCollection.cs" />
     <Compile Include="IBrowsableItemChanges.cs" />
     <Compile Include="IInvalidPhotoCheck.cs" />
-    <Compile Include="ILoadable.cs" />
     <Compile Include="IPhoto.cs" />
     <Compile Include="IPhotoComparer.cs" />
     <Compile Include="IPhotoExtensions.cs" />

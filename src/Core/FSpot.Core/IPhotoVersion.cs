@@ -27,9 +27,11 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+using Hyena;
+
 namespace FSpot.Core
 {
-    public interface IPhotoVersion : ILoadable
+    public interface IPhotoVersion
     {
         #region Metadata
 
@@ -50,6 +52,8 @@ namespace FSpot.Core
 
 
         #region File Information
+
+        SafeUri Uri { get; set; }
 
         // TODO: add Comment
         // TODO: not every item is also imported. So does it make sense to have that checksum here?
