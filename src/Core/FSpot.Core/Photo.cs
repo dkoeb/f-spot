@@ -183,27 +183,27 @@ namespace FSpot
 
 		// This doesn't check if a version of that name already exists,
 		// it's supposed to be used only within the Photo and PhotoStore classes.
-		public void AddVersionUnsafely (uint version_id, SafeUri base_uri, string filename, string import_md5, string name, bool is_protected)
+		public void AddVersionUnsafely (uint version_id, SafeUri uri, string import_md5, string name, bool is_protected)
 		{
-			versions [version_id] = new PhotoVersion (this, version_id, base_uri, filename, import_md5, name, is_protected);
+			versions [version_id] = new PhotoVersion (this, version_id, uri, import_md5, name, is_protected);
 
 			highest_version_id = Math.Max (version_id, highest_version_id);
 			changes.AddVersion (version_id);
 		}
 
-		public uint AddVersion (SafeUri base_uri, string filename, string name)
+		public uint AddVersion (SafeUri uri, string name)
 		{
-			return AddVersion (base_uri, filename, name, false);
+			return AddVersion (uri, name, false);
 		}
 
-		public uint AddVersion (SafeUri base_uri, string filename, string name, bool is_protected)
+		public uint AddVersion (SafeUri uri, string name, bool is_protected)
 		{
 			if (VersionNameExists (name))
 				throw new ApplicationException ("A version with that name already exists");
 			highest_version_id ++;
 			string import_md5 = string.Empty; // Modified version
 
-			versions [highest_version_id] = new PhotoVersion (this, highest_version_id, base_uri, filename, import_md5, name, is_protected);
+			versions [highest_version_id] = new PhotoVersion (this, highest_version_id, uri, import_md5, name, is_protected);
 
 			changes.AddVersion (highest_version_id);
 			return highest_version_id;
@@ -387,7 +387,7 @@ namespace FSpot
 		private uint CreateVersion (string name, string extension, uint base_version_id, bool create, bool is_protected)
 		{
 			extension = extension ?? VersionUri (base_version_id).GetExtension ();
-			SafeUri new_base_uri = DefaultVersion.BaseUri;
+			SafeUri new_base_uri = DefaultVersion.Uri.GetBaseUri ();
 			string filename = GetFilenameForVersionName (name, extension);
 			SafeUri original_uri = VersionUri (base_version_id);
 			SafeUri new_uri = new_base_uri.Append (filename);
@@ -407,7 +407,7 @@ namespace FSpot
 			}
 			highest_version_id ++;
 
-			versions [highest_version_id] = new PhotoVersion (this, highest_version_id, new_base_uri, filename, import_md5, name, is_protected);
+			versions [highest_version_id] = new PhotoVersion (this, highest_version_id, new_uri, import_md5, name, is_protected);
 
 			changes.AddVersion (highest_version_id);
 
@@ -436,7 +436,7 @@ namespace FSpot
 				}
 			}
 			highest_version_id ++;
-			versions [highest_version_id] = new PhotoVersion (this, highest_version_id, version.BaseUri, version.Filename, version.ImportMD5, name, is_protected);
+			versions [highest_version_id] = new PhotoVersion (this, highest_version_id, version.Uri, version.ImportMD5, name, is_protected);
 
 			changes.AddVersion (highest_version_id);
 
@@ -453,8 +453,8 @@ namespace FSpot
 									 num);
 				name = string.Format (name, num);
 				//SafeUri uri = GetUriForVersionName (name, System.IO.Path.GetExtension (VersionUri(base_version_id).GetFilename()));
-				string filename = GetFilenameForVersionName (name, System.IO.Path.GetExtension (versions [base_version_id].Filename));
-				SafeUri uri = DefaultVersion.BaseUri.Append (filename);
+				string filename = GetFilenameForVersionName (name, System.IO.Path.GetExtension (versions [base_version_id].Uri));
+				SafeUri uri = DefaultVersion.Uri.GetBaseUri ().Append (filename);
 				GLib.File file = GLib.FileFactory.NewForUri (uri);
 
 				if (! VersionNameExists (name) && ! file.Exists)
@@ -474,8 +474,8 @@ namespace FSpot
 						(num == 1) ? Catalog.GetString ("Modified in {1}") : Catalog.GetString ("Modified in {1} ({0})"),
 						num, name);
 
-				string filename = GetFilenameForVersionName (name, System.IO.Path.GetExtension (versions [base_version_id].Filename));
-				SafeUri uri = DefaultVersion.BaseUri.Append (filename);
+				string filename = GetFilenameForVersionName (name, System.IO.Path.GetExtension (versions [base_version_id].Uri));
+				SafeUri uri = DefaultVersion.Uri.GetBaseUri ().Append (filename);
 				GLib.File file = GLib.FileFactory.NewForUri (uri);
 
 				if (! VersionNameExists (final_name) && ! file.Exists)

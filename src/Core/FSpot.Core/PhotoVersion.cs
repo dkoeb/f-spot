@@ -29,7 +29,6 @@
 
 using Hyena;
 using FSpot.Core;
-using FSpot.Utils;
 
 namespace FSpot
 {
@@ -37,27 +36,18 @@ namespace FSpot
     {
         public string Name { get; set; }
         public IPhoto Photo { get; private set; }
-        public SafeUri BaseUri { get; set; }
-        public string Filename { get; set; }
 
-        public SafeUri Uri {
-            get { return BaseUri.Append (Filename); }
-            set {
-                BaseUri = value.GetBaseUri ();
-                Filename = value.GetFilename ();
-            }
-        }
+        public SafeUri Uri { get; set; }
 
         public string ImportMD5 { get; set; }
         public uint VersionId { get; private set; }
         public bool IsProtected { get; private set; }
 
-        public PhotoVersion (IPhoto photo, uint version_id, SafeUri base_uri, string filename, string md5_sum, string name, bool is_protected)
+        public PhotoVersion (IPhoto photo, uint version_id, SafeUri uri, string md5_sum, string name, bool is_protected)
         {
             Photo = photo;
             VersionId = version_id;
-            BaseUri = base_uri;
-            Filename = filename;
+            Uri = uri;
             ImportMD5 = md5_sum;
             Name = name;
             IsProtected = is_protected;

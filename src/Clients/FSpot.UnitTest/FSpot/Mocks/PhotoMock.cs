@@ -26,7 +26,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System.IO;
 using FSpot.Core;
 using Hyena;
 using Moq;
@@ -38,8 +37,7 @@ namespace FSpot.Mocks
 		static Mock<IPhoto> CreateMock (SafeUri uri, string name)
 		{
 			var versionMock = new Mock<IPhotoVersion> ();
-			versionMock.Setup (v => v.BaseUri).Returns (uri);
-			versionMock.Setup (v => v.Filename).Returns (Path.GetFileName (uri));
+			versionMock.Setup (v => v.Uri).Returns (uri);
 			versionMock.Setup (v => v.Name).Returns (name);
 
 			var photoMock = new Mock<IPhoto> ();
@@ -59,8 +57,7 @@ namespace FSpot.Mocks
 
 			var versionMock = new Mock<IPhotoVersion> ();
 			versionMock.Setup (v => v.Name).Returns (versionName);
-			versionMock.Setup (v => v.BaseUri).Returns (versionUri);
-			versionMock.Setup (v => v.Filename).Returns (Path.GetFileName (versionUri));
+			versionMock.Setup (v => v.Uri).Returns (versionUri);
 
 			var versions = new[] { photoMock.Object.DefaultVersion, versionMock.Object };
 

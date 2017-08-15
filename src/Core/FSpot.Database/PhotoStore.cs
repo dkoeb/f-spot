@@ -182,8 +182,8 @@ namespace FSpot.Database
 					"INSERT INTO photos (time, base_uri, filename, description, roll_id, default_version_id, rating) " +
 					"VALUES (?, ?, ?, ?, ?, ?, ?)",
 					unix_time,
-					item.DefaultVersion.BaseUri.ToString (),
-					item.DefaultVersion.Filename,
+					item.DefaultVersion.Uri.GetBaseUri ().ToString (),
+					item.DefaultVersion.Uri.GetFilename (),
 					description,
 					rollId,
 					Photo.OriginalVersionId,
@@ -198,7 +198,7 @@ namespace FSpot.Database
 				// rename original version to "Original" if we import default version only
 				// this applies when a version is detached from another photo
 				string name = defaultVersionOnly && versionId == Photo.OriginalVersionId ? Catalog.GetString ("Original") : version.Name;
-				photo.AddVersionUnsafely (versionId++, version.BaseUri, version.Filename, version.ImportMD5, name, true);
+				photo.AddVersionUnsafely (versionId++, version.Uri, version.ImportMD5, name, true);
 				InsertVersion (photo, photo.Versions.Last () as PhotoVersion);
 			}
 			photo.DefaultVersionId = versionId - 1;
@@ -216,8 +216,8 @@ namespace FSpot.Database
 				photo.Id,
 				version.VersionId,
 				version.Name,
-				version.BaseUri.ToString (),
-				version.Filename,
+				version.Uri.GetBaseUri ().ToString (),
+				version.Uri.GetFilename (),
 				version.IsProtected,
 				(version.ImportMD5 != string.Empty ? version.ImportMD5 : null)));
 		}
@@ -238,7 +238,7 @@ namespace FSpot.Database
 					string import_md5 = reader ["import_md5"] != null ? reader ["import_md5"].ToString () : null;
 					bool is_protected = Convert.ToBoolean (reader ["protected"]);
 
-					photo.AddVersionUnsafely (version_id, base_uri, filename, import_md5, name, is_protected);
+					photo.AddVersionUnsafely (version_id, new SafeUri (base_uri).Append (filename), import_md5, name, is_protected);
 				}
 			}
 		}
@@ -275,7 +275,7 @@ namespace FSpot.Database
 						string import_md5 = reader ["import_md5"] != null ? reader ["import_md5"].ToString () : null;
 						bool is_protected = Convert.ToBoolean (reader ["protected"]);
 
-						photo.AddVersionUnsafely (version_id, base_uri, filename, import_md5, name, is_protected);
+						photo.AddVersionUnsafely (version_id, new SafeUri (base_uri).Append (filename), import_md5, name, is_protected);
 					}
 				}
 			}
@@ -507,8 +507,8 @@ namespace FSpot.Database
 						"base_uri = ?, filename = ?, protected = ?, import_md5 = ? " +
 						"WHERE photo_id = ? AND version_id = ?",
 						version.Name,
-						version.BaseUri.ToString (),
-						version.Filename,
+						version.Uri.GetBaseUri (),
+						version.Uri.GetFilename (),
 						version.IsProtected,
 						(version.ImportMD5 != string.Empty ? version.ImportMD5 : null),
 						photo.Id,

@@ -27,8 +27,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using Hyena;
-
 namespace FSpot.Core
 {
     public interface IPhotoVersion : ILoadable
@@ -52,20 +50,6 @@ namespace FSpot.Core
 
 
         #region File Information
-
-        // TODO: BaseUri and Filename are just in the database scheme. Does it make sense to provide them
-        //       to the outside?
-
-        /// <summary>
-        ///   The base uri of the directory of this version. That is the whole uri without the
-        ///   filename.
-        /// </summary>
-        SafeUri BaseUri { get; }
-
-        /// <summary>
-        ///    The filename of this version.
-        /// </summary>
-        string Filename { get; }
 
         // TODO: add Comment
         // TODO: not every item is also imported. So does it make sense to have that checksum here?

@@ -28,7 +28,6 @@
 //
 
 using System;
-using System.IO;
 
 namespace FSpot.Core
 {
@@ -59,9 +58,7 @@ namespace FSpot.Core
 
         public static int CompareDefaultVersionUri (this IPhoto photo1, IPhoto photo2)
         {
-            var photo1_uri = Path.Combine (photo1.DefaultVersion.BaseUri, photo1.DefaultVersion.Filename);
-            var photo2_uri = Path.Combine (photo2.DefaultVersion.BaseUri, photo2.DefaultVersion.Filename);
-            return string.Compare (photo1_uri, photo2_uri);
+            return string.Compare (photo1.DefaultVersion.Uri, photo2.DefaultVersion.Uri);
         }
     }
 }

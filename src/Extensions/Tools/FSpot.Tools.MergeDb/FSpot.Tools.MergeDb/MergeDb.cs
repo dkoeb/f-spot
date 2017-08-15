@@ -295,7 +295,7 @@ namespace FSpot.Tools.MergeDb
 			foreach (uint version_id in photo.VersionIds)
 				if (version_id != Photo.OriginalVersionId) {
 					PhotoVersion version = photo.GetVersion (version_id) as PhotoVersion;
-					uint newv = newp.AddVersion (version.BaseUri, version.Filename, version.Name, version.IsProtected);
+					uint newv = newp.AddVersion (version.Uri, version.Name, version.IsProtected);
 					if (version_id == photo.DefaultVersionId)
 						newp.DefaultVersionId = newv;
 				}

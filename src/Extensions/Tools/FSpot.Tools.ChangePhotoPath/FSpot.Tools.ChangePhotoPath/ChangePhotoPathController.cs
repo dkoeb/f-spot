@@ -215,8 +215,7 @@ namespace FSpot.Tools.ChangePhotoPath
 			if (photo == null)
 				photo = photo_store.Get (photo_id_array[index]);
 			PhotoVersion version = photo.GetVersion ( (uint) version_id_array[index]) as PhotoVersion;
-			version.BaseUri = new SafeUri ( path ).GetBaseUri ();
-			version.Filename = new SafeUri ( path ).GetFilename ();
+			version.Uri = new SafeUri (path);
 			photo.Changes.UriChanged = true;
 			photo.Changes.ChangeVersion ( (uint) version_id_array[index] );
 		}
