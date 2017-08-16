@@ -31,36 +31,36 @@ using Hyena;
 
 namespace FSpot.Core
 {
-    public interface IPhotoVersion
-    {
-        #region Metadata
+	public interface IPhotoVersion
+	{
+		#region Metadata
 
-        /// <summary>
-        ///   The name of the version. e.g. "Convert to Black and White"
-        /// </summary>
-        /// <remarks>
-        ///   This is not the name of the file.
-        /// </remarks>
-        string Name { get; }
+		/// <summary>
+		///   The name of the version. e.g. "Convert to Black and White"
+		/// </summary>
+		/// <remarks>
+		///   This is not the name of the file.
+		/// </remarks>
+		string Name { get; }
 
-        // TODO: add Comment
-        bool IsProtected { get; }
+		// TODO: add Comment
+		bool IsProtected { get; }
 
-        // TODO: add more metadata
+		// TODO: add more metadata
 
-        #endregion
+		#endregion
 
 
-        #region File Information
+		#region File Information
 
-        SafeUri Uri { get; set; }
+		SafeUri Uri { get; set; }
 
-        // TODO: add Comment
-        // TODO: not every item is also imported. So does it make sense to have that checksum here?
-        //       (If a comment is added, include the easons for having this here!)
-        string ImportMD5 { get; }
-        
-        #endregion
-        
-    }
+		// TODO: add Comment
+		// TODO: not every item is also imported. So does it make sense to have that checksum here?
+		//       (If a comment is added, include the easons for having this here!)
+		string ImportMD5 { get; }
+
+		#endregion
+
+	}
 }

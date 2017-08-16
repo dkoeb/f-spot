@@ -32,25 +32,25 @@ using FSpot.Core;
 
 namespace FSpot
 {
-    public class PhotoVersion : IPhotoVersion
-    {
-        public string Name { get; set; }
-        public IPhoto Photo { get; private set; }
+	public class PhotoVersion : IPhotoVersion
+	{
+		public string Name { get; set; }
+		public IPhoto Photo { get; private set; }
 
-        public SafeUri Uri { get; set; }
+		public SafeUri Uri { get; set; }
 
-        public string ImportMD5 { get; set; }
-        public uint VersionId { get; private set; }
-        public bool IsProtected { get; private set; }
+		public string ImportMD5 { get; set; }
+		public uint VersionId { get; private set; }
+		public bool IsProtected { get; private set; }
 
-        public PhotoVersion (IPhoto photo, uint version_id, SafeUri uri, string md5_sum, string name, bool is_protected)
-        {
-            Photo = photo;
-            VersionId = version_id;
-            Uri = uri;
-            ImportMD5 = md5_sum;
-            Name = name;
-            IsProtected = is_protected;
-        }
-    }
+		public PhotoVersion (IPhoto photo, uint version_id, SafeUri uri, string md5_sum, string name, bool is_protected)
+		{
+			Photo = photo;
+			VersionId = version_id;
+			Uri = uri;
+			ImportMD5 = md5_sum;
+			Name = name;
+			IsProtected = is_protected;
+		}
+	}
 }
