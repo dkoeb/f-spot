@@ -29,22 +29,33 @@
 
 using Hyena;
 using FSpot.Core;
+using FSpot.Imaging;
 
 namespace FSpot
 {
 	public class PhotoVersion : IPhotoVersion
 	{
+		readonly IImageFileFactory imageFileFactory;
+
 		public string Name { get; set; }
 		public IPhoto Photo { get; private set; }
 
-		public SafeUri Uri { get; set; }
+		public SafeUri Uri {
+			get { return ImageFile.Uri; }
+			set {
+				ImageFile = imageFileFactory.Create (value);
+			}
+		}
+		public IImageFile ImageFile { get; private set; }
 
 		public string ImportMD5 { get; set; }
 		public uint VersionId { get; private set; }
 		public bool IsProtected { get; private set; }
 
-		public PhotoVersion (IPhoto photo, uint version_id, SafeUri uri, string md5_sum, string name, bool is_protected)
+		public PhotoVersion (IPhoto photo, IImageFileFactory imageFileFactory, uint version_id, SafeUri uri, string md5_sum, string name, bool is_protected)
 		{
+			this.imageFileFactory = imageFileFactory;
+
 			Photo = photo;
 			VersionId = version_id;
 			Uri = uri;

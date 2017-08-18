@@ -28,6 +28,7 @@
 //
 
 using Hyena;
+using FSpot.Imaging;
 
 namespace FSpot.Core
 {
@@ -54,6 +55,8 @@ namespace FSpot.Core
 		#region File Information
 
 		SafeUri Uri { get; set; }
+
+		IImageFile ImageFile { get; }
 
 		// TODO: add Comment
 		// TODO: not every item is also imported. So does it make sense to have that checksum here?

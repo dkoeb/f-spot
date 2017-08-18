@@ -501,16 +501,13 @@ namespace FSpot.Widgets
                 histogram_expander.Visible = true;
                 UpdateHistogram();
 
-                using (var image = App.Instance.Container.Resolve<IImageFileFactory> ().Create (photo.DefaultVersion.Uri)) {
-                    var metadata = image.Metadata;
-                    foreach (var entry in entries) {
-                        bool is_single = (entry.SetSingle != null);
-                        
-                        if (is_single)
-                            entry.SetSingle (entry.InfoWidget, photo, metadata);
+                foreach (var entry in entries) {
+                    bool is_single = (entry.SetSingle != null);
 
-                        SetEntryWidgetVisibility (entry, is_single);
-                    }
+                    if (is_single)
+                        entry.SetSingle (entry.InfoWidget, photo, photo.DefaultVersion.ImageFile.Metadata);
+
+                    SetEntryWidgetVisibility (entry, is_single);
                 }
                 Show ();
             } else if (Photos.Length > 1) {
@@ -575,9 +572,7 @@ namespace FSpot.Widgets
             
             try {
                 if (hint == null)
-                    using (var img = App.Instance.Container.Resolve<IImageFileFactory> ().Create (photo.DefaultVersion.Uri)) {
-                        hint = img.Load (256, 256);
-                    }
+                    hint = photo.DefaultVersion.ImageFile.Load (256, 256);
                 
                 histogram_image.Pixbuf = histogram.Generate (hint, max);
                 

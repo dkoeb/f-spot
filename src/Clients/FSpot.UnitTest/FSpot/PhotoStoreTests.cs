@@ -26,9 +26,11 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+using System;
 using System.IO;
 using System.Linq;
 using FSpot.Database;
+using FSpot.Imaging;
 using FSpot.Mocks;
 using Hyena;
 using Mono.Unix;
@@ -63,7 +65,9 @@ namespace FSpot
 			var databaseConnection = new FSpotDatabaseConnection (database);
 			var dbMock = new Mock<IDb> ();
 			dbMock.Setup (m => m.Database).Returns (databaseConnection);
-			var store = new PhotoStore (null, null, dbMock.Object, true);
+			var factoryMock = new Mock<IImageFileFactory> ();
+			factoryMock.Setup (m => m.Create (It.IsAny<SafeUri> ())).Returns<SafeUri> (uri => Mock.Of<IImageFile> (m => m.Uri == uri));
+			var store = new PhotoStore (factoryMock.Object, null, dbMock.Object, true);
 			var photoMock = PhotoMock.Create (uri, originalName);
 
 			var photo = store.CreateFrom (photoMock, true, 1);
@@ -82,7 +86,9 @@ namespace FSpot
 			var databaseConnection = new FSpotDatabaseConnection (database);
 			var dbMock = new Mock<IDb> ();
 			dbMock.Setup (m => m.Database).Returns (databaseConnection);
-			var store = new PhotoStore (null, null, dbMock.Object, true);
+			var factoryMock = new Mock<IImageFileFactory> ();
+			factoryMock.Setup (m => m.Create (It.IsAny<SafeUri> ())).Returns<SafeUri> (uri => Mock.Of<IImageFile> (m => m.Uri == uri));
+			var store = new PhotoStore (factoryMock.Object, null, dbMock.Object, true);
 			var photoMock = PhotoMock.CreateWithVersion (uri, originalName, modifiedUri, modifiedName);
 
 			var photo = store.CreateFrom (photoMock, true, 1);
@@ -101,7 +107,9 @@ namespace FSpot
 			var databaseConnection = new FSpotDatabaseConnection (database);
 			var dbMock = new Mock<IDb> ();
 			dbMock.Setup (m => m.Database).Returns (databaseConnection);
-			var store = new PhotoStore (null, null, dbMock.Object, true);
+			var factoryMock = new Mock<IImageFileFactory> ();
+			factoryMock.Setup (m => m.Create (It.IsAny<SafeUri> ())).Returns<SafeUri> (uri => Mock.Of<IImageFile> (m => m.Uri == uri));
+			var store = new PhotoStore (factoryMock.Object, null, dbMock.Object, true);
 			var photoMock = PhotoMock.CreateWithVersion (uri, originalName, modifiedUri, modifiedName);
 
 			var photo = store.CreateFrom (photoMock, false, 1);

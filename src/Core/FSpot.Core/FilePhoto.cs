@@ -51,7 +51,7 @@ namespace FSpot.Core
 		public FilePhoto (SafeUri uri, string name, IImageFileFactory imageFileFactory)
 		{
 			versions = new List<IPhotoVersion> ();
-			versions.Add (new FilePhotoVersion { Uri = uri, Name = name });
+			versions.Add (new FilePhotoVersion (uri, imageFileFactory) { Name = name });
 
 			this.imageFileFactory = imageFileFactory;
 		}
@@ -75,15 +75,13 @@ namespace FSpot.Core
 			if (metadata_parsed)
 				return;
 
-			using (var image = imageFileFactory.Create (DefaultVersion.Uri)) {
-				var metadata = image.Metadata;
-				if (metadata != null) {
-					var date = metadata.DateTime;
-					time = date.HasValue ? date.Value : CreateDate;
-					description = metadata.Comment;
-				} else {
-					throw new Exception ("Corrupt File!");
-				}
+			var metadata = DefaultVersion.ImageFile.Metadata;
+			if (metadata != null) {
+				var date = metadata.DateTime;
+				time = date.HasValue ? date.Value : CreateDate;
+				description = metadata.Comment;
+			} else {
+				throw new Exception ("Corrupt File!");
 			}
 
 			metadata_parsed = true;
@@ -139,11 +137,13 @@ namespace FSpot.Core
 
 		public void AddVersion(SafeUri uri, string name)
 		{
-			versions.Add (new FilePhotoVersion { Uri = uri, Name = name });
+			versions.Add (new FilePhotoVersion (uri, imageFileFactory) { Name = name });
 		}
 
 		class FilePhotoVersion : IPhotoVersion
 		{
+			readonly IImageFileFactory imageFileFactory;
+
 			public string Name { get; set; }
 
 			public bool IsProtected {
@@ -156,7 +156,10 @@ namespace FSpot.Core
 			public string Filename {
 				get { return Uri.GetFilename (); }
 			}
-			public SafeUri Uri { get; set; }
+			public SafeUri Uri {
+				get { return ImageFile.Uri; }
+				set { ImageFile = imageFileFactory.Create (value); }
+			}
 
 			string import_md5 = string.Empty;
 			public string ImportMD5 {
@@ -165,6 +168,14 @@ namespace FSpot.Core
 						import_md5 = HashUtils.GenerateMD5 (Uri);
 					return import_md5;
 				}
+			}
+
+			public IImageFile ImageFile { get; private set; }
+
+			public FilePhotoVersion (SafeUri uri, IImageFileFactory imageFileFactory)
+			{
+				this.imageFileFactory = imageFileFactory;
+				Uri = uri;
 			}
 		}
 	}

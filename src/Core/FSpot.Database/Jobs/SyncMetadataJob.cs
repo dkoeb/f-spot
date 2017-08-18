@@ -86,20 +86,18 @@ namespace FSpot.Database.Jobs
 			for (int i = 0; i < tags.Length; i++)
 				names [i] = tags [i].Name;
 
-			using (var image = Container.Resolve<IImageFileFactory> ().Create (photo.DefaultVersion.Uri)) {
-				var metadata = image.Metadata;
-				metadata.EnsureAvailableTags ();
+			var metadata = photo.DefaultVersion.ImageFile.Metadata;
+			metadata.EnsureAvailableTags ();
 
-				metadata.DateTime = photo.Time;
-				metadata.Comment = photo.Description ?? string.Empty;
-				metadata.Keywords = names;
-				metadata.Rating = photo.Rating;
-				metadata.Software = Defines.PACKAGE + " version " + Defines.VERSION;
+			metadata.DateTime = photo.Time;
+			metadata.Comment = photo.Description ?? string.Empty;
+			metadata.Keywords = names;
+			metadata.Rating = photo.Rating;
+			metadata.Software = Defines.PACKAGE + " version " + Defines.VERSION;
 
-				var alwaysSidecar = Preferences.Get<bool> (Preferences.METADATA_ALWAYS_USE_SIDECAR);
-				var fileSystem = Container.Resolve<IFileSystem> ();
-				metadata.SaveSafely (photo.DefaultVersion.Uri, alwaysSidecar, fileSystem);
-			}
+			var alwaysSidecar = Preferences.Get<bool> (Preferences.METADATA_ALWAYS_USE_SIDECAR);
+			var fileSystem = Container.Resolve<IFileSystem> ();
+			metadata.SaveSafely (photo.DefaultVersion.Uri, alwaysSidecar, fileSystem);
 		}
 	}
 }

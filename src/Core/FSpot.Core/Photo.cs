@@ -185,7 +185,7 @@ namespace FSpot
 		// it's supposed to be used only within the Photo and PhotoStore classes.
 		public void AddVersionUnsafely (uint version_id, SafeUri uri, string import_md5, string name, bool is_protected)
 		{
-			versions [version_id] = new PhotoVersion (this, version_id, uri, import_md5, name, is_protected);
+			versions [version_id] = new PhotoVersion (this, imageFileFactory, version_id, uri, import_md5, name, is_protected);
 
 			highest_version_id = Math.Max (version_id, highest_version_id);
 			changes.AddVersion (version_id);
@@ -203,7 +203,7 @@ namespace FSpot
 			highest_version_id ++;
 			string import_md5 = string.Empty; // Modified version
 
-			versions [highest_version_id] = new PhotoVersion (this, highest_version_id, uri, import_md5, name, is_protected);
+			versions [highest_version_id] = new PhotoVersion (this, imageFileFactory, highest_version_id, uri, import_md5, name, is_protected);
 
 			changes.AddVersion (highest_version_id);
 			return highest_version_id;
@@ -255,29 +255,27 @@ namespace FSpot
 		public uint SaveVersion (Gdk.Pixbuf buffer, bool create_version)
 		{
 			uint version = DefaultVersionId;
-			using (var img = imageFileFactory.Create (DefaultVersion.Uri)) {
-				// Always create a version if the source is not a jpeg for now.
-				create_version = create_version || imageFileFactory.IsJpeg (DefaultVersion.Uri);
+			// Always create a version if the source is not a jpeg for now.
+			create_version = create_version || imageFileFactory.IsJpeg (DefaultVersion.Uri);
 
-				if (buffer == null)
-					throw new ApplicationException ("invalid (null) image");
+			if (buffer == null)
+				throw new ApplicationException ("invalid (null) image");
 
+			if (create_version)
+				version = CreateDefaultModifiedVersion (DefaultVersionId, false);
+
+			try {
+				var versionUri = VersionUri (version);
+
+				imageFileFactory.CreateDerivedVersion (DefaultVersion.Uri, versionUri, 95, buffer);
+				GetVersion (version).ImportMD5 = HashUtils.GenerateMD5 (VersionUri (version));
+				DefaultVersionId = version;
+			} catch (System.Exception e) {
+				Log.Exception (e);
 				if (create_version)
-					version = CreateDefaultModifiedVersion (DefaultVersionId, false);
+					DeleteVersion (version);
 
-				try {
-					var versionUri = VersionUri (version);
-
-					imageFileFactory.CreateDerivedVersion (DefaultVersion.Uri, versionUri, 95, buffer);
-					GetVersion (version).ImportMD5 = HashUtils.GenerateMD5 (VersionUri (version));
-					DefaultVersionId = version;
-				} catch (System.Exception e) {
-					Log.Exception (e);
-					if (create_version)
-						DeleteVersion (version);
-
-					throw e;
-				}
+				throw e;
 			}
 
 			return version;
@@ -407,7 +405,7 @@ namespace FSpot
 			}
 			highest_version_id ++;
 
-			versions [highest_version_id] = new PhotoVersion (this, highest_version_id, new_uri, import_md5, name, is_protected);
+			versions [highest_version_id] = new PhotoVersion (this, imageFileFactory, highest_version_id, new_uri, import_md5, name, is_protected);
 
 			changes.AddVersion (highest_version_id);
 
@@ -436,7 +434,7 @@ namespace FSpot
 				}
 			}
 			highest_version_id ++;
-			versions [highest_version_id] = new PhotoVersion (this, highest_version_id, version.Uri, version.ImportMD5, name, is_protected);
+			versions [highest_version_id] = new PhotoVersion (this, imageFileFactory, highest_version_id, version.Uri, version.ImportMD5, name, is_protected);
 
 			changes.AddVersion (highest_version_id);
 

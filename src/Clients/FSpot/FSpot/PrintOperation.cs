@@ -131,52 +131,50 @@ namespace FSpot
 						DrawCropMarks (cr, x * w, y * h, w * .1);
 					if (x == ppx || y == ppy || p_index >= selected_photos.Length)
 						continue;
-					using (var img = App.Instance.Container.Resolve<IImageFileFactory> ().Create (selected_photos [p_index].DefaultVersion.Uri)) {
-						Gdk.Pixbuf pixbuf;
-						try {
-							pixbuf = img.Load ((int)mx, (int)my);
-							if (pixbuf == null) {
-								Log.Error ("Not enough memory for printing " + selected_photos [p_index].DefaultVersion.Uri);
-								continue;
-							}
-							Cms.Profile printer_profile;
-							if (ColorManagement.Profiles.TryGetValue (Preferences.Get<string> (Preferences.COLOR_MANAGEMENT_OUTPUT_PROFILE), out printer_profile))
-								ColorManagement.ApplyProfile (pixbuf, img.GetProfile (), printer_profile);
-						} catch (Exception e) {
-							Log.Exception ("Unable to load image " + selected_photos [p_index].DefaultVersion.Uri + "\n", e);
-							// If the image is not found load error pixbuf
-							pixbuf = new Gdk.Pixbuf (PixbufUtils.ErrorPixbuf, 0, 0,
-											  PixbufUtils.ErrorPixbuf.Width,
-											  PixbufUtils.ErrorPixbuf.Height);
+					Gdk.Pixbuf pixbuf;
+					try {
+						pixbuf = selected_photos [p_index].DefaultVersion.ImageFile.Load ((int)mx, (int)my);
+						if (pixbuf == null) {
+							Log.Error ("Not enough memory for printing " + selected_photos [p_index].DefaultVersion.Uri);
+							continue;
 						}
-
-						bool rotated = false;
-						if (Math.Sign ((double)pixbuf.Width / pixbuf.Height - 1.0) != Math.Sign (w / h - 1.0)) {
-							Gdk.Pixbuf d_pixbuf = pixbuf.RotateSimple (Gdk.PixbufRotation.Counterclockwise);
-							pixbuf.Dispose ();
-							pixbuf = d_pixbuf;
-							rotated = true;
-						}
-
-						DrawImage (cr, pixbuf, x * w, y * h, w, h);
-
-						string tag_string = "";
-						foreach (Tag t in selected_photos [p_index].Tags)
-							tag_string = string.Concat (tag_string, t.Name);
-
-						// FIXME: Convert this to StringBuilder?
-						var label = string.Format (print_label_format,
-										  comment,
-										  selected_photos [p_index].Name,
-										  selected_photos [p_index].Time.ToLocalTime ().ToShortDateString (),
-										  selected_photos [p_index].Time.ToLocalTime ().ToShortTimeString (),
-										  tag_string,
-										  selected_photos [p_index].Description);
-
-						DrawComment (context, (x + 1) * w, (rotated ? y : y + 1) * h, (rotated ? w : h) * .025, label, rotated);
-
-						pixbuf.Dispose ();
+						Cms.Profile printer_profile;
+						if (ColorManagement.Profiles.TryGetValue (Preferences.Get<string> (Preferences.COLOR_MANAGEMENT_OUTPUT_PROFILE), out printer_profile))
+							ColorManagement.ApplyProfile (pixbuf, selected_photos [p_index].DefaultVersion.ImageFile.GetProfile (), printer_profile);
+					} catch (Exception e) {
+						Log.Exception ("Unable to load image " + selected_photos [p_index].DefaultVersion.Uri + "\n", e);
+						// If the image is not found load error pixbuf
+						pixbuf = new Gdk.Pixbuf (PixbufUtils.ErrorPixbuf, 0, 0,
+										  PixbufUtils.ErrorPixbuf.Width,
+										  PixbufUtils.ErrorPixbuf.Height);
 					}
+
+					bool rotated = false;
+					if (Math.Sign ((double)pixbuf.Width / pixbuf.Height - 1.0) != Math.Sign (w / h - 1.0)) {
+						Gdk.Pixbuf d_pixbuf = pixbuf.RotateSimple (Gdk.PixbufRotation.Counterclockwise);
+						pixbuf.Dispose ();
+						pixbuf = d_pixbuf;
+						rotated = true;
+					}
+
+					DrawImage (cr, pixbuf, x * w, y * h, w, h);
+
+					string tag_string = "";
+					foreach (Tag t in selected_photos [p_index].Tags)
+						tag_string = string.Concat (tag_string, t.Name);
+
+					// FIXME: Convert this to StringBuilder?
+					var label = string.Format (print_label_format,
+									  comment,
+									  selected_photos [p_index].Name,
+									  selected_photos [p_index].Time.ToLocalTime ().ToShortDateString (),
+									  selected_photos [p_index].Time.ToLocalTime ().ToShortTimeString (),
+									  tag_string,
+									  selected_photos [p_index].Description);
+
+					DrawComment (context, (x + 1) * w, (rotated ? y : y + 1) * h, (rotated ? w : h) * .025, label, rotated);
+
+					pixbuf.Dispose ();
 				}
 			}
 

@@ -61,9 +61,8 @@ namespace FSpot.Addins.Editors
 		public override Widget ConfigurationWidget ()
 		{
 			int max;
-			using (var img = App.Instance.Container.Resolve<IImageFileFactory> ().Create (State.Items[0].DefaultVersion.Uri))
-				using (Pixbuf p = img.Load ())
-					max = Math.Max (p.Width, p.Height);
+			using (Pixbuf p = State.Items [0].DefaultVersion.ImageFile.Load ())
+				max = Math.Max (p.Width, p.Height);
 
 			size = new SpinButton (128, max, 10);
 			size.Value = max;

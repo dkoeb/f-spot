@@ -112,25 +112,23 @@ namespace FSpot.Import
 
 		public bool Import (Photo photo, IPhoto importingFrom)
 		{
-			using (var image = imageFileFactory.Create (importingFrom.DefaultVersion.Uri)) {
-				var metadata = image.Metadata;
-				if (metadata == null)
-					return true;
+			var metadata = importingFrom.DefaultVersion.ImageFile.Metadata;
+			if (metadata == null)
+				return true;
 
-				// Copy Rating
-				var rating = metadata.Rating;
-				if (rating.HasValue) {
-					var rating_val = Math.Min (metadata.Rating.Value, 5);
-					photo.Rating = Math.Max (0, rating_val);
-				}
-
-				// Copy Keywords
-				foreach (var keyword in metadata.Keywords) {
-					AddTagToPhoto (photo, keyword);
-				}
-
-				// XXX: We might want to copy more data.
+			// Copy Rating
+			var rating = metadata.Rating;
+			if (rating.HasValue) {
+				var rating_val = Math.Min (metadata.Rating.Value, 5);
+				photo.Rating = Math.Max (0, rating_val);
 			}
+
+			// Copy Keywords
+			foreach (var keyword in metadata.Keywords) {
+				AddTagToPhoto (photo, keyword);
+			}
+
+			// XXX: We might want to copy more data.
 			return true;
 		}
 
